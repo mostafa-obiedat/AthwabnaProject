@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+body {
+    background-color: #FFF7F2;
+    font-family: '29LT Bukra', sans-serif;
+}
