@@ -11,11 +11,13 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Men from "./pages/Men";
-import Woman from "./pages/Woman";
+import Women from "./pages/Women";
 import Kids from "./pages/Kids";
 import ProductDetails from './pages/ProductDetails'
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Order from "./pages/Order"
+import Orders from "./pages/Orders"
 import WorkShop from "./pages/WorkShop";
 import WorkshopDetails from "./pages/WorkshopDetails";
 import WorkForm from "./pages/WorkForm";
@@ -31,11 +33,13 @@ function Layout() {
     <Route path="/register" element={<Register/>} />
       <Route path="/" element={<Home />} />
        <Route path="/men" element={<Men />} /> 
-       <Route path="/woman" element={<Woman/>} />
+       <Route path="/women" element={<Women/>} />
        <Route path="/kids" element={<Kids/>}/>
-       <Route path="/productdetails" element={<ProductDetails/>}/>
+       <Route path="/product/:id" element={<ProductDetails />} />
        <Route path="/cart" element={<Cart/>}/>
-       <Route path="/checkout" element={<Checkout/>}/>
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order" element={<Order />} />
+        <Route path="/orders" element={<Orders/>}/>
        <Route path="/workshop" element={<WorkShop/>}/>
        <Route path="/workshopdetails" element={<WorkshopDetails/>}/>
        <Route path="/workform" element={<WorkForm/>}/>

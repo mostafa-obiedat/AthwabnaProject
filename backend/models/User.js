@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -18,8 +17,8 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   phonenumber: {
-   type: Number,
-   required: true,
+    type: Number,
+    required: true,
   },
   profileImage: {
     type: String,
@@ -27,15 +26,20 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["user","admin"],
+    enum: ["user", "admin"],
     default: "user",
   },
+  savedAddresses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
+  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
+  coupons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Coupon" }],
   likedProducts: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Products",  // Correct reference to "News"
+      ref: "Products", // Correct reference to "News"
     },
-  ]
+  ],
+  createdAt: Date, // تاريخ إضافة المنتج
+  updatedAt: Date,
 });
 
 userSchema.pre("save", async function (next) {

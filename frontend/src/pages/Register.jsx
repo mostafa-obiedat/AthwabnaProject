@@ -267,11 +267,13 @@ function Register() {
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true, // تأكد من إرسال الكوكيز مع الطلب
       });
-
+  
       if (response.status === 201) {
         console.log('تم التسجيل بنجاح:', response.data.message);
-        // يمكنك توجيه المستخدم إلى صفحة تسجيل الدخول أو الصفحة الرئيسية هنا
+        // توجيه المستخدم إلى صفحة تسجيل الدخول أو الصفحة الرئيسية
+        window.location.href = '/'; // أو أي صفحة أخرى تريد توجيه المستخدم إليها
       }
     } catch (error) {
       if (error.response) {

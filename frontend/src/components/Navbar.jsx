@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../assets/logo (3).png';
-
+import { Link } from 'react-router-dom';
 const Navbar = () => {
     return (
         <nav className="bg-[#2B2B2B]">
@@ -8,20 +8,28 @@ const Navbar = () => {
                 {/* القائمة اليمنى */}
                 <ul className="flex space-x-4">
                     <li>
-                        <a className="text-white hover:text-gray-300" href="men.html">رجال</a>
+                        <Link to="men">
+                            <a className="text-white hover:text-gray-300">رجال</a>
+                        </Link>
                     </li>
                     <li>
-                        <a className="text-white hover:text-gray-300" href="woman.html">نساء</a>
+                        <Link to="women">
+                            <a className="text-white hover:text-gray-300" href="woman.html">نساء</a>
+                        </Link>    
                     </li>
                     <li>
-                        <a className="text-white hover:text-gray-300" href="kids.html">أطفال</a>
+                        <Link to="kids">
+                            <a className="text-white hover:text-gray-300" href="kids.html">أطفال</a>
+                        </Link>   
                     </li>
                 </ul>
 
                 {/* الشعار في المنتصف */}
-                <a href="index.html" className="mx-auto">
+                <Link to="/">
+                <a className="mx-auto">
                     <img src={logo} alt="Logo" className="w-46" />
                 </a>
+                </Link>
 
                 {/* الأيقونات */}
                 <div className="flex space-x-5 text-white text-lg">
@@ -34,9 +42,11 @@ const Navbar = () => {
                     <a href="#" className="hover:text-gray-300">
                         <i className="bi bi-search text-white hover:text-gray-300 text"></i>
                     </a>
-                    <a href="#" className="hover:text-gray-300">
+                    <Link to="cart">
+                    <a className="hover:text-gray-300">
                         <i className="bi bi-cart text-white hover:text-gray-300 text"></i>
-                    </a>
+                        </a>
+                    </Link>
 
                 </div>
             </div>

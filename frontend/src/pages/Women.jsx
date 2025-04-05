@@ -13,7 +13,7 @@ const Men = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products/men'); // جلب المنتجات من API
+        const response = await axios.get('http://localhost:5000/api/products/women'); // جلب المنتجات من API
         setProducts(response.data); // تحديث حالة المنتجات
       } catch (err) {
         setError(err.message); // في حالة حدوث خطأ

@@ -6,6 +6,12 @@ const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "1d" });
 };
 
+exports.checkAuth = (req, res) => {
+  res.status(200).json({
+    isAuthenticated: true,
+    user: req.user,
+  });
+};
 // تسجيل مستخدم جديد
 exports.register = async (req, res) => {
   try {
@@ -21,7 +27,7 @@ exports.register = async (req, res) => {
 
     // إنشاء توكن
     const token = generateToken(user._id);
-
+    console.log("Generated Token:", token);
     // إرسال التوكن في الكوكيز
     res
       .cookie("token", token, { httpOnly: true })
@@ -34,23 +40,33 @@ exports.register = async (req, res) => {
 
 // تسجيل الدخول
 exports.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
+  try {
     const user = await User.findOne({ email });
-    if (!user)
-      return res.status(400).json({ message: "Invalid email or password" });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ message: "البريد الإلكتروني أو كلمة المرور غير صحيحة" });
+    }
 
     const isMatch = await user.matchPassword(password);
-    if (!isMatch)
-      return res.status(400).json({ message: "Invalid email or password" });
+    if (!isMatch) {
+      return res
+        .status(400)
+        .json({ message: "البريد الإلكتروني أو كلمة المرور غير صحيحة" });
+    }
 
-    const token = generateToken(user._id);
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
 
-    res
-      .cookie("token", token, { httpOnly: true })
-      .status(200)
-      .json({ message: "Logged in successfully" });
+    // إرسال الـ Token في الكوكيز
+    res.cookie("token", token, {
+      httpOnly: true,
+    });
+
+    res.status(200).json({ message: "تم تسجيل الدخول بنجاح" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
