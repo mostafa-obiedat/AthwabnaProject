@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const Payment = require("../models/Payment");
+const Coupon = require("../models/Coupon")
 const jwt = require("jsonwebtoken");
 
 // إنشاء توكن JWT
@@ -69,5 +71,63 @@ exports.login = async (req, res) => {
     res.status(200).json({ message: "تم تسجيل الدخول بنجاح" });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getUserProfile = async (req, res) => {
+  
+  try {
+    const user = req.user; // جاي من authmiddleware
+    
+    const coupons = await Coupon.find({ usedBy: user._id });
+    // جلب بيانات المستخدم + سجل المدفوعات
+    const payments = await Payment.find({ userId: user._id }).populate('productId', 'name');
+
+    res.json({
+      user: {
+        id: user._id,
+        name: user.username,
+        email: user.email,
+        phonenumber: user.phonenumber,
+        profileImage: user.profileImage,
+        createdAt: user.createdAt,
+        // ممكن تضيف أكثر
+      },
+      payments,
+      coupons,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'خطأ في جلب بيانات البروفايل' });
+  }
+};
+exports.updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { name, email, phonenumber } = req.body;
+
+    const updatedFields = {
+      name,
+      email,
+      phonenumber,
+      updatedAt: Date.now(),
+    };
+
+    if (req.file) {
+      updatedFields.profileImage = `/uploads/${req.file.filename}`;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedFields, {
+      new: true,
+    });
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "المستخدم غير موجود" });
+    }
+
+    res.status(200).json({ message: "تم التحديث بنجاح", updatedUser });
+  } catch (error) {
+    console.error("❌ خطأ في تحديث البروفايل:", error);
+    res.status(500).json({ message: "فشل في تحديث البيانات" });
   }
 };

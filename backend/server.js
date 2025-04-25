@@ -9,6 +9,11 @@ const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const checkoutRoutes = require("./routes/checkoutRoutes");
 const ordersRoutes = require("./routes/ordersRoutes");
+const favoriteRoutes = require("./routes/favoriteRoutes");
+const workshopRoutes = require('./routes/workshops');
+const workshopDetailsRoutes = require('./routes/workshopDetailsRoutes');
+const paymentRoutes = require("./routes/paymentRoutes");
+const contactRoutes = require("./routes/contactRoutes")
 //---------------------------
 // Middleware
 //---------------------------
@@ -37,6 +42,7 @@ mongoose
 //---------------------------
 // ROUTES
 //---------------------------
+app.use('/uploads', express.static('uploads'));
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoutes);
 app.get("/api/auth/check", (req, res) => {
@@ -51,6 +57,11 @@ app.get("/api/auth/check", (req, res) => {
 app.use("/api/cart", cartRoutes);
 app.use("/api/checkout", checkoutRoutes);
 app.use("/api/orders", ordersRoutes);
+app.use("/api/favorites", favoriteRoutes);
+app.use('/api/workshops', workshopRoutes);
+app.use('/api/workshops', workshopDetailsRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api", contactRoutes)
 // في ملف server.js أو app.js
 
 //---------------------------

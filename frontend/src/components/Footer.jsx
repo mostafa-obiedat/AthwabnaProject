@@ -20,8 +20,8 @@ const Footer = () => {
           <div className="mb-6 text-center ml-40">
             <h6 className="font-bold mb-3">روابط تهمك</h6>
             <ul className="space-y-2">
-              <li><a href="about.html" className="text-white hover:text-gray-300">من نحن</a></li>
-              <li><a href="contact.html" className="text-white hover:text-gray-300">اتصل بنا</a></li>
+              <li><a href="/about" className="text-white hover:text-gray-300">من نحن</a></li>
+              <li><a href="/contact" className="text-white hover:text-gray-300">اتصل بنا</a></li>
               <li><a href="#" className="text-white hover:text-gray-300">الخصوصية</a></li>
               <li><a href="#" className="text-white hover:text-gray-300">الشروط والأحكام</a></li>
               <li><a href="#" className="text-white hover:text-gray-300">سياسة الاستبدال والاسترجاع</a></li>

@@ -11,6 +11,8 @@ const couponSchema = new mongoose.Schema({
   usedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   maxUses: { type: Number },
   currentUses: { type: Number, default: 0 },
+  onlyOncePerUser: { type: Boolean, default: false },
+  usedAt: { type: Date },
 });
 
 module.exports = mongoose.model("Coupon", couponSchema);

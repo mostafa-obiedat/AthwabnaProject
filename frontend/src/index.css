@@ -1,7 +1,9 @@
 @import "tailwindcss";
 @import 'bootstrap-icons/font/bootstrap-icons.css';
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
 
 body {
-    background-color: #FFF7F2;
+    background-color: #fffbfb;
     font-family: '29LT Bukra', sans-serif;
 }

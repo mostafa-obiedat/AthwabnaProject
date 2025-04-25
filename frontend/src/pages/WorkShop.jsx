@@ -1,150 +1,132 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 
 const WorkShop = () => {
-  // Sample workshop data
-  const workshops = [
-    {
-      id: 1,
-      title: "ورشة تصميم الشماغ الأردني",
-      price: "100 دينار",
-      image: "/images/shmaghW.jpg",
-      description: "الورشة عبارة عن تعلم خطوات تصميم الشماغ الأردني التقليدي بأساليب عصرية وتقنيات الطباعة والنسيج.",
-      ageRange: "14 - 80 سنة"
-    },
-    {
-      id: 2,
-      title: "ورشة خياطة الدامر الأردني",
-      price: "100 دينار",
-      image: "/images/damerW.png",
-      description: "الورشة عبارة عن تعلم خياطة وصنع الدامر الأردني التقليدي بخطوات",
-      ageRange: "14 - 80 سنة"
-    },
-    {
-      id: 3,
-      title: "ورشة خياطة الثياب الأردنية",
-      price: "100 دينار",
-      image: "/images/tatreezW.jpg",
-      description: "الورشة عبارة عن تعلم خياطة وتصميم الثياب الأردنية التقليدية.",
-      ageRange: "14 - 80 سنة"
-    },
-    {
-      id: 4,
-      title: "ورشة خياطة الثياب الأردنية",
-      price: "100 دينار",
-      image: "/images/shmaghW.jpg",
-      description: "الورشة عبارة عن تعلم خياطة وتصميم الثياب الأردنية التقليدية.",
-      ageRange: "14 - 80 سنة"
-    },
-    {
-      id: 5,
-      title: "ورشة خياطة الثياب الأردنية",
-      price: "100 دينار",
-      image: "/images/shmaghW.jpg",
-      description: "الورشة عبارة عن تعلم خياطة وتصميم الثياب الأردنية التقليدية.",
-      ageRange: "14 - 80 سنة"
-    },
-    {
-      id: 6,
-      title: "ورشة خياطة الثياب الأردنية",
-      price: "100 دينار",
-      image: "/images/shmaghW.jpg",
-      description: "الورشة عبارة عن تعلم خياطة وتصميم الثياب الأردنية التقليدية.",
-      ageRange: "14 - 80 سنة"
-    }
-  ];
+  const [workshops, setWorkshops] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [freeWorkshopsOnly, setFreeWorkshopsOnly] = useState(false);
-  const [ageRange, setAgeRange] = useState(60); // Default age range
-  const [priceRange, setPriceRange] = useState(500); // Default price range
+  // حالة الفلاتر
+  const [filters, setFilters] = useState({
+    freeOnly: false,
+    maxPrice: 500,
+    location: '',
+  });
+
+  // جلب البيانات مع تطبيق الفلاتر
+  useEffect(() => {
+    const fetchWorkshops = async () => {
+      try {
+        const params = {
+          maxPrice: filters.freeOnly ? 0 : filters.maxPrice,
+          freeOnly: filters.freeOnly,
+          location: filters.location
+        };
+
+        const response = await axios.get('http://localhost:5000/api/workshops', { params });
+        setWorkshops(response.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWorkshops();
+  }, [filters]);
+
+  const handleFilterChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFilters(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  if (loading) return <div className="text-center py-5">جاري التحميل...</div>;
+  if (error) return <div className="text-center py-5 text-red-500">حدث خطأ: {error}</div>;
 
   return (
     <div className="container mx-auto my-5 px-4" id="top">
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* Filters Section */}
+        {/* قسم الفلاتر */}
         <div className="lg:w-1/4 w-full mb-4">
           <div className="sticky top-8 z-10 bg-white border border-gray-300 rounded-2xl p-4 shadow-md">
             <h5 className="mb-3 font-medium">تصنيف حسب الفئة</h5>
-            <select className="w-full border border-gray-300 rounded mb-3 p-2">
-              <option>مكان الورشة</option>
-              <option>جميع الأماكن</option>
+            <select
+              name="location"
+              value={filters.location}
+              onChange={handleFilterChange}
+              className="w-full border border-gray-300 rounded mb-3 p-2"
+            >
+              <option value="">جميع الأماكن</option>
+              <option value="عمان">عمان</option>
+              <option value="إربد">إربد</option>
+              <option value="الزرقاء">الزرقاء</option>
             </select>
-            
-            <h5 className="mb-3 font-medium">تصنيف حسب العمر</h5>
-            <input 
-              type="range" 
-              className="w-full mb-3 accent-[#CEBEB3]" 
-              min="0" 
-              max="120"
-              value={ageRange}
-              onChange={(e) => setAgeRange(e.target.value)}
-            />
-            
+
             <h5 className="mb-3 font-medium">تصنيف حسب السعر</h5>
-            <input 
-              type="range" 
-              className="w-full mb-3 accent-[#AA1313]" 
-              min="80" 
-              max="1100"
-              value={priceRange}
-              onChange={(e) => setPriceRange(e.target.value)}
+            <input
+              type="range"
+              name="maxPrice"
+              min="0"
+              max="1000"
+              value={filters.maxPrice}
+              onChange={handleFilterChange}
+              className="w-full mb-3 accent-[#AA1313]"
+              disabled={filters.freeOnly}
             />
-            
+            <span className="block text-center mb-3">{filters.maxPrice} دينار</span>
+
             <div className="mb-3 flex items-center">
-              <input 
-                className="mr-2" 
-                type="checkbox" 
-                id="freeWorkshops"
-                checked={freeWorkshopsOnly}
-                onChange={() => setFreeWorkshopsOnly(!freeWorkshopsOnly)}
+              <input
+                type="checkbox"
+                name="freeOnly"
+                checked={filters.freeOnly}
+                onChange={handleFilterChange}
+                className="mr-2"
               />
-              <label className="form-check-label" htmlFor="freeWorkshops">ورشات مجانية</label>
+              <label>ورشات مجانية فقط</label>
             </div>
-            
-            <button className="w-full bg-[#CEBEB3] text-white py-2 px-4 rounded hover:bg-opacity-90 transition">
-              بحث
-            </button>
           </div>
         </div>
 
-        {/* Cards Section */}
+        {/* عرض البطاقات */}
         <div className="lg:w-3/4 w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {workshops.map((workshop) => (
-              <div key={workshop.id} className="mb-4">
+              <div key={workshop._id} className="mb-4">
                 <div className="border border-gray-300 rounded-2xl overflow-hidden shadow-md h-[500px] flex flex-col">
                   <div className="bg-[#CEBEB3] text-white font-bold text-center py-2">
-                    {workshop.price}
+                    {workshop.isFree ? 'مجاناً' : `${workshop.price} دينار`}
                   </div>
-                  <img 
-                    src={workshop.image} 
-                    className="h-[170px] w-full object-cover" 
-                    alt="ورشة"
+                  <img
+                    src={`http://localhost:5000${workshop.image}`}
+                    className="h-[170px] w-full object-cover"
+                    alt={workshop.title}
                   />
                   <div className="p-4 flex-grow">
                     <h6 className="font-medium">{workshop.title}</h6>
                     <p className="text-[#444] text-xs mt-8">{workshop.description}</p>
+                    <p className="text-xs text-gray-400 mb-1">المكان: {workshop.location}</p>
                     <p className="text-xs text-gray-400 mb-1">الفئة العمرية</p>
                     <p className="text-sm">{workshop.ageRange}</p>
                   </div>
                   <div className="text-center p-4 border-t">
-                    <button className="border border-[#AA1313] text-[#AA1313] py-2 px-4 rounded hover:bg-[#AA1313] hover:text-white transition duration-400">
-                      المزيد
-                    </button>
+                    <Link to={`/workshops/${workshop._id}`}>
+                      <button className="border border-[#AA1313] text-[#AA1313] py-2 px-4 rounded hover:bg-[#AA1313] hover:text-white transition duration-400 cursor-pointer">
+                        المزيد
+                      </button>
+                    </Link>
+
                   </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </div>
-
-      <div className="text-center my-6">
-        <a 
-          href="#top" 
-          className="inline-block py-2 px-5 text-gray-700 border border-gray-300 rounded hover:bg-[#fcf0e9] transition duration-400"
-        >
-          العودة إلى أعلى ↑
-        </a>
       </div>
     </div>
   );

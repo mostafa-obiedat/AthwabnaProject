@@ -6,31 +6,44 @@ const Product = require("../models/Product");
 
 exports.applyCoupon = async (req, res) => {
   try {
-    const { couponCode } = req.body;
+    const { couponCode, orderTotal } = req.body;
     const userId = req.user._id;
 
     const coupon = await Coupon.findOne({ code: couponCode, isActive: true });
     if (!coupon) {
       return res
         .status(404)
-        .json({ message: "كوبون غير صالح أو منتهي الصلاحية" });
+        .json({ message: "كوبون غير صالح أو غير مفعل" });
     }
 
-    // التحقق من صلاحية الكوبون
-    if (coupon.validUntil < new Date()) {
+    const now = new Date();
+
+    if (coupon.validFrom > now) {
+      return res.status(400).json({ message: "هذا الكوبون غير متاح بعد" });
+    }
+
+    if (coupon.validUntil < now) {
       return res.status(400).json({ message: "انتهت صلاحية هذا الكوبون" });
     }
 
     if (coupon.maxUses && coupon.currentUses >= coupon.maxUses) {
-      return res
-        .status(400)
-        .json({ message: "تم استخدام هذا الكوبون بالكامل" });
+      return res.status(400).json({ message: "تم استخدام هذا الكوبون بالكامل" });
     }
 
-    // إضافة الكوبون للمستخدم
-    await User.findByIdAndUpdate(userId, {
-      $addToSet: { coupons: coupon._id },
-    });
+    if (coupon.usedBy.includes(userId)) {
+      return res.status(400).json({ message: "لقد استخدمت هذا الكوبون من قبل" });
+    }
+
+    if (coupon.minOrderAmount && orderTotal < coupon.minOrderAmount) {
+      return res.status(400).json({
+        message: `الحد الأدنى لاستخدام الكوبون هو ${coupon.minOrderAmount} د.أ`,
+      });
+    }
+
+    // تحديث بيانات الاستخدام (اختياري: يمكنك تأجيل هذا لمرحلة تأكيد الدفع)
+    coupon.usedBy.push(userId);
+    coupon.currentUses += 1;
+    await coupon.save();
 
     res.json({
       success: true,
@@ -41,6 +54,7 @@ exports.applyCoupon = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "حدث خطأ أثناء تطبيق الكوبون" });
   }
 };

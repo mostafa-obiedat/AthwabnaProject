@@ -14,4 +14,5 @@ router.use(authMiddleware); // ⬅️ تطبيق middleware على جميع rout
 router.get("/", cart.getCart);
 router.post("/add", cart.addToCart);
 
+
 module.exports = router;

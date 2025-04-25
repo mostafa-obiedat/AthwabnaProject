@@ -16,7 +16,11 @@ const orderSchema = new mongoose.Schema({
   shippingAddress: { type: mongoose.Schema.Types.ObjectId, ref: "Address" },
   paymentMethod: { type: String, required: true },
   paymentStatus: { type: String, default: "pending" },
-  orderStatus: { type: String, default: "processing" },
+  orderstatus: {
+    type: String,
+    enum: ['processing', 'shipped', 'delivered', 'cancelled'],
+    default: 'processing'
+  },  
   couponUsed: { type: mongoose.Schema.Types.ObjectId, ref: "Coupon" },
   discountAmount: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },

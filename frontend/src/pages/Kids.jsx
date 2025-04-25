@@ -44,7 +44,7 @@ const Men = () => {
     <div className="bg-[#FFF7F2] min-h-screen">
       {/* قسم المنتجات */}
       <div className="container mx-auto py-5">
-        <h2 className="text-2xl font-bold mt-5 mb-4">قسم الملابس الرجالية</h2>
+        <h2 className="text-2xl font-bold mt-5 mb-4">قسم ملابس الاطفال</h2>
         <div className="filter flex justify-between items-center mb-4">
           <label htmlFor="sort" className="form-label">ترتيب حسب:</label>
           <select id="sort" className="form-select w-auto">

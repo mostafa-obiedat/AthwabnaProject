@@ -38,9 +38,7 @@ const userSchema = new mongoose.Schema({
       ref: "Products", // Correct reference to "News"
     },
   ],
-  createdAt: Date, // تاريخ إضافة المنتج
-  updatedAt: Date,
-});
+}, { timestamps: true }); 
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
