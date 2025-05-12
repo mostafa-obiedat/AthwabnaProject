@@ -49,7 +49,7 @@ function Layout() {
        <Route path="/workshop" element={<WorkShop/>}/>
        <Route path="/workshops/:id" element={<WorkshopDetails/>} />
        <Route path="/workshopForm/:id" element={<WorkForm/>}/>
-       <Route path="/dashboard" element={<Dashboard/>}/>
+       <Route path="/dashboard/*" element={<Dashboard/>}/>
        <Route path="/about" element={<About/>}/>
        <Route path="/contact" element={<Contact/>}/>
 

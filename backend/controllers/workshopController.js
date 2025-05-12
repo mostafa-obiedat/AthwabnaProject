@@ -1,19 +1,23 @@
 const Workshop = require('../models/Workshop');
 
-// الحصول على جميع الورشات مع التصفية
+
 exports.getWorkshops = async (req, res) => {
   try {
-    const { maxPrice, minAge, maxAge, freeOnly, location } = req.query;
+    const { maxPrice, freeOnly, location, query } = req.query;
     
-    let query = {};
+    let filter = {};
     
-    if (maxPrice) query.price = { $lte: Number(maxPrice) };
-    if (freeOnly === 'true') query.isFree = true;
-    if (location) {
-      query.location = { $regex: location, $options: 'i' };
+    if (maxPrice) filter.price = { $lte: Number(maxPrice) };
+    if (freeOnly === 'true') filter.isFree = true;
+    if (location) filter.location = { $regex: location, $options: 'i' };
+    if (query) {
+      filter.$or = [
+        { title: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } }
+      ];
     }
     
-    const workshops = await Workshop.find(query);
+    const workshops = await Workshop.find(filter);
     res.json(workshops);
   } catch (err) {
     res.status(500).json({ 

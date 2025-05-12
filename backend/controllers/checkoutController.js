@@ -87,6 +87,9 @@ exports.saveAddress = async (req, res) => {
     });
 
     await newAddress.save();
+    await User.findByIdAndUpdate(req.user._id, {
+      $push: { savedAddresses: newAddress._id },
+    });
 
     if (newAddress.isDefault) {
       await Address.updateMany(
@@ -108,6 +111,8 @@ exports.saveAddress = async (req, res) => {
     });
   }
 };
+
+
 exports.createOrder = async (req, res) => {
   try {
     const {

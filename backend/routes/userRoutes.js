@@ -18,4 +18,9 @@ router.put(
   auth.updateUserProfile,
 );
 
+router.get('/logout', (req, res) => {
+  res.clearCookie('token'); // أو اسم الكوكيز المستخدم
+  res.status(200).json({ message: "Logged out successfully" });
+});
+
 module.exports = router;

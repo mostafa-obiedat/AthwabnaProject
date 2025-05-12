@@ -1,4 +1,5 @@
 const Favorite =  require("../models/Favorite");
+const User = require("../models/User");
 
 exports.addToFavorites = async (req, res) => {
   const userId = req.user._id;
@@ -14,6 +15,8 @@ exports.addToFavorites = async (req, res) => {
 
     const favorite = new Favorite({ user: userId, product: productId });
     await favorite.save();
+
+    await User.findByIdAndUpdate(userId, { $addToSet: { likedProducts: productId } });
 
     res.status(201).json({ message: "تمت الإضافة إلى المفضلة", favorite });
   } catch (error) {

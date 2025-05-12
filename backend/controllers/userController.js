@@ -67,7 +67,7 @@ exports.login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
     });
-
+    console.log("Generated Token:", token);
     res.status(200).json({ message: "تم تسجيل الدخول بنجاح" });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -101,6 +101,7 @@ exports.getUserProfile = async (req, res) => {
     res.status(500).json({ message: 'خطأ في جلب بيانات البروفايل' });
   }
 };
+
 exports.updateUserProfile = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -131,3 +132,4 @@ exports.updateUserProfile = async (req, res) => {
     res.status(500).json({ message: "فشل في تحديث البيانات" });
   }
 };
+

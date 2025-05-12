@@ -453,34 +453,31 @@ const Men = () => {
         {!loading && totalPages >= 1 && (
           <div className="flex justify-center items-center gap-2 my-8">
             <button
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage(prev => prev + 1)}
-              className="px-4 py-2 border border-gray-300 rounded-md disabled:opacity-50 hover:bg-gray-100 cursor-pointer"
-            >
-              التالي
-            </button>
-            {[...Array(totalPages)].map((_, index) => {
-        const pageNumber = totalPages - index; // عكس ترتيب الصفحات
-        return (
-          <button
-            key={pageNumber}
-            onClick={() => setCurrentPage(pageNumber)}
-            className={`px-4 py-2 border rounded-md cursor-pointer ${
-              currentPage === pageNumber 
-                ? 'bg-[#2B2B2B] text-white border-gray-800' 
-                : 'border-gray-300 hover:bg-gray-100'
-            }`}
-          >
-            {pageNumber}
-          </button>
-        );
-        })}
-            <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(prev => prev - 1)}
               className="px-4 py-2 border border-gray-300 rounded-md disabled:opacity-50 hover:bg-gray-100 cursor-pointer"
             >
               السابق
+            </button>
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentPage(index + 1)}
+                className={`px-4 py-2 border rounded-md ${
+                  currentPage === index + 1 
+                    ? 'bg-[#2B2B2B] text-white border-gray-800' 
+                    : 'border-gray-300 hover:bg-gray-100'
+                }`}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(prev => prev + 1)}
+              className="px-4 py-2 border border-gray-300 rounded-md disabled:opacity-50 hover:bg-gray-100 cursor-pointer"
+            >
+              التالي
             </button>
           </div>
         )}

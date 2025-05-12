@@ -5,6 +5,8 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
 const userRoute = require("./routes/userRoutes");
+const adminRoute = require("./routes/adminRoutes");
+const adminProductRoutes = require("./routes/adminProductRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const checkoutRoutes = require("./routes/checkoutRoutes");
@@ -44,6 +46,8 @@ mongoose
 //---------------------------
 app.use('/uploads', express.static('uploads'));
 app.use("/api/users", userRoute);
+app.use("/api/admin", adminRoute);
+app.use("/api/admin", adminProductRoutes);
 app.use("/api/products", productRoutes);
 app.get("/api/auth/check", (req, res) => {
   if (req.user) {

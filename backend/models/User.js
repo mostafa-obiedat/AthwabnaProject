@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
   likedProducts: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Products", // Correct reference to "News"
+      ref: "Product", // Correct reference to "News"
     },
   ],
 }, { timestamps: true }); 
@@ -47,6 +47,12 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+
+userSchema.methods.matchPassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+module.exports = mongoose.model("User", userSchema);
 // userSchema.methods.toggleLike = function (articleId) {
 //   const index = this.likedArticles.indexOf(articleId);
 //   if (index === -1) {
@@ -58,8 +64,3 @@ userSchema.pre("save", async function (next) {
 // };
 
 // Password comparison method
-userSchema.methods.matchPassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
-};
-
-module.exports = mongoose.model("User", userSchema);

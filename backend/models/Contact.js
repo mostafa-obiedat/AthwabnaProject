@@ -14,6 +14,14 @@ const contactSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    repliedAt: {
+      type: Date,
+      default: null,
+    },
+    isReplied: {
+      type: Boolean,
+      default: false,
+    }
   },
   { timestamps: true } // لضمان تخزين التاريخ والوقت
 );
