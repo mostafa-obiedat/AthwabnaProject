@@ -113,4 +113,8 @@
 **Mustafa Mohammad Fareed Mustafa Obiedat**  
 Software Engineering Graduate – Hashemite University  
 Orange Coding Academy Trainee  
-📧 [mustafaobiedat3@gmail.com](mailto:mustafaobiedat3@gmail.com) <!-- Replace with your email -->
+📧 [mustafaobiedat3@gmail.com](mailto:mustafaobiedat3@gmail.com) 
+
+Link Docs for this project [https://docs.google.com/document/d/1NdDUIkEAIjHmOqmvij21ymXJiUKcCDaxLAJn9pgu4y0/edit?tab=t.0](https://docs.google.com/document/d/1NdDUIkEAIjHmOqmvij21ymXJiUKcCDaxLAJn9pgu4y0/edit?usp=drive_link)
+
+Link figma https://www.figma.com/design/Ksg1hqFsxHxIENHlh55K8e/Masterpiece?node-id=0-1&t=LX9mlHnMkumv6Nb0-1
