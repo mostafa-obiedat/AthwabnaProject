@@ -1,51 +1,43 @@
 const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
-  name: {
-    type: String,
-  }, // اسم المنتج
-  description: {
-    type: String,
-  }, // وصف المنتج
-  price: {
+  name: String,
+  description: String,
+  price: Number,
+  discount: {
     type: Number,
+    default: 0, // 0 يعني لا يوجد خصم
   },
-  sold: {
-    type: Number,
-    default: 0
+  offerEndDate: {
+  type: Date,
   },
+  sold: { type: Number, default: 0 },
   category: {
     type: String,
-    enum: ["men", "women", "kids"],
+    enum: ['men', 'women', 'kids', 'accessory-men', 'accessory-women']
   },
-  size: [String], // الأحجام المتاحة (مثل ['S', 'M', 'L'])
-  color: [String], // الألوان المتاحة
-  images: [String], // روابط صور المنتج
-  stock: {
-    type: Number,
-  }, // الكمية المتاحة في المخزون
+  size: [String], // فقط للملابس
+  color: [String],
+  images: [String],
+  stock: Number,
+  type: {
+    type: String,
+    enum: ['product', 'accessory'],
+    default: 'product'
+  },
   ratings: [
     {
-      userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      }, // معرف المستخدم الذي قام بالتقييم
-      rating: {
-        type: Number, required: true, min: 1, max: 5
-      }, // التقييم (من 1 إلى 5)
-      comment: {
-        type: String,
-      },
-      createdAt: { type: Date, default: Date.now }, // تعليق المستخدم
-    },
-  ],// ✅ أضف هذا السطر لحقل المتوسط
-  averageRating: {
-    type: Number,
-    default: 0,
-  },
-  createdAt: Date, // تاريخ إضافة المنتج
-  updatedAt: Date, // تاريخ آخر تحديث
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      rating: { type: Number, required: true, min: 1, max: 5 },
+      comment: String,
+      createdAt: { type: Date, default: Date.now },
+    }
+  ],
+  averageRating: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: Date,
 });
+
 productSchema.methods.calculateAverageRating = async function () {
   const product = this;
 

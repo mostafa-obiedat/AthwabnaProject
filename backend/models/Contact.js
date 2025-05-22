@@ -10,6 +10,18 @@ const contactSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    messageType: {
+      type: String,
+      enum: ['inquiry', 'feedback'], // نوع الرسالة (استفسار أو فيدباك)
+      required: true,
+      default: 'inquiry'
+    },
+    rating: {
+      type: Number,
+      min: 1,
+      max: 5,
+      required: function() { return this.messageType === 'feedback'; } // مطلوب فقط للفيدباك
+    },
     message: {
       type: String,
       required: true,
@@ -23,8 +35,7 @@ const contactSchema = new mongoose.Schema(
       default: false,
     }
   },
-  { timestamps: true } // لضمان تخزين التاريخ والوقت
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Contact", contactSchema);
-

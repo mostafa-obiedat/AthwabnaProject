@@ -66,3 +66,77 @@ exports.getUserOrders = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+// GET /api/orders/:id => جلب تفاصيل الطلب بعد الدفع
+exports.thankYou = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id)
+      .populate('user', 'name email') // جلب اسم وبريد المستخدم
+      .populate('shippingAddress'); // إذا كان عندك موديل مرتبط
+
+    if (!order) {
+      return res.status(404).json({ message: 'الطلب غير موجود' });
+    }
+
+    // التأكد أن المستخدم الحالي هو من يملك الطلب (أو admin)
+    if (order.user._id.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'ليس لديك صلاحية لعرض هذا الطلب' });
+    }
+
+    res.status(200).json({ order });
+  } catch (err) {
+    console.error('فشل في جلب تفاصيل الطلب:', err);
+    res.status(500).json({ message: 'خطأ في الخادم' });
+  }
+};
+
+
+
+// exports.thankYou = async (req, res) => {
+//   try {
+//     const order = await Order.findById(req.params.id)
+//       .populate({
+//         path: 'user',
+//         model: 'users',
+//         select: 'username email' // استخدم username إذا كان هذا هو الحقل في الموديل
+//       })
+//       .populate({
+//         path: 'products.product',
+//         model: 'Product',
+//         select: 'name price images' // تغيير من image إلى images لاسترجاع المصفوفة
+//       })
+//       .populate('shippingAddress');
+//     if (!order) {
+//       return res.status(404).json({ message: 'الطلب غير موجود' });
+//     }
+
+//     // التحقق من صلاحية المستخدم
+//     if (order.user._id.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+//       return res.status(403).json({ message: 'ليس لديك صلاحية لعرض هذا الطلب' });
+//     }
+
+//     // تعديل هيكل البيانات المرجعة لسهولة الاستخدام في الواجهة
+//     const responseData = {
+//       order: {
+//         ...order._doc,
+//         products: order.products.map(item => ({
+//           ...item._doc,
+//           product: {
+//             ...item.product._doc,
+//             // نأخذ أول صورة إذا كانت images موجودة ومليئة
+//             mainImage: item.product.images?.length > 0 ? item.product.images[0] : null
+//           }
+//         }))
+//       }
+//     };
+
+//     res.status(200).json(responseData);
+//   } catch (err) {
+//     console.error('فشل في جلب تفاصيل الطلب:', err);
+//     res.status(500).json({ message: 'خطأ في الخادم' });
+//   }
+// };

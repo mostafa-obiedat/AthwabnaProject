@@ -3,6 +3,7 @@ const Address = require("../models/Address");
 const Coupon = require("../models/Coupon");
 const User = require("../models/User");
 const Product = require("../models/Product");
+const Notification = require("../models/Notification");
 
 exports.applyCoupon = async (req, res) => {
   try {
@@ -196,6 +197,10 @@ exports.createOrder = async (req, res) => {
 
     await order.save();
 
+    await Notification.create({
+      message: `🚨 طلب جديد من ${req.user.username}`,
+      type: "order"
+    });
     // إضافة الطلب للمستخدم
     await User.findByIdAndUpdate(userId, { $addToSet: { orders: order._id } });
 

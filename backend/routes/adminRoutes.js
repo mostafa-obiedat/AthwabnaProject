@@ -33,7 +33,8 @@ router.delete("/workshops/:id", authMiddleware, isAdmin, admin.deleteWorkshop);
 router.get("/settings", authMiddleware, isAdmin, admin.getAdminInfo);
 router.put("/update-info", authMiddleware, isAdmin, admin.updateAdmin);
 router.put("/update-password", authMiddleware, isAdmin, admin.updatePassword);
-
+router.get("/notifications", admin.getNotifications);
+router.put("/notifications/:id/mark-read", admin.markAsRead);
 
 
 module.exports = router;

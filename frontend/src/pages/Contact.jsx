@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Send, Phone, Mail, MapPin, CheckCircle, AlertCircle } from "lucide-react";
+import { Send, Phone, Mail, MapPin, CheckCircle, AlertCircle, Star } from "lucide-react";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    messageType: "inquiry", // القيمة الافتراضية
+    rating: null,
     message: "",
   });
   const [status, setStatus] = useState(null);
+  const [hoverRating, setHoverRating] = useState(0);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,13 +21,35 @@ const Contact = () => {
     });
   };
 
+  const handleRatingChange = (rating) => {
+    setFormData({
+      ...formData,
+      rating: rating,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // التحقق من صحة التقييم إذا كانت رسالة فيدباك
+    if (formData.messageType === "feedback" && !formData.rating) {
+      setStatus({
+        type: "error",
+        message: "الرجاء اختيار تقييم لرسالة الفيدباك",
+      });
+      return;
+    }
+
     try {
-      const response = await axios.post("http://localhost:5000/api/contact", formData);
+      const response = await axios.post("http://localhost:5000/api/contacts/create", formData);
       setStatus({ type: "success", message: "تم إرسال رسالتك بنجاح!" });
-      setFormData({ name: "", email: "", message: "" });
+      setFormData({ 
+        name: "", 
+        email: "", 
+        messageType: "inquiry",
+        rating: null,
+        message: "" 
+      });
     } catch (error) {
       setStatus({
         type: "error",
@@ -109,6 +134,50 @@ const Contact = () => {
                 </div>
 
                 <div className="mb-5">
+                  <label className="block text-lg font-medium mb-2 text-right">
+                    نوع الرسالة
+                  </label>
+                  <select
+                    name="messageType"
+                    value={formData.messageType}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#f8e5d7] focus:border-[#AA1313] transition-all"
+                    dir="rtl"
+                  >
+                    <option value="inquiry">استفسار</option>
+                    <option value="feedback">فيدباك</option>
+                  </select>
+                </div>
+
+                {formData.messageType === "feedback" && (
+                  <div className="mb-5">
+                    <label className="block text-lg font-medium mb-2 text-right">
+                      التقييم
+                    </label>
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => handleRatingChange(star)}
+                          onMouseEnter={() => setHoverRating(star)}
+                          onMouseLeave={() => setHoverRating(0)}
+                          className="text-2xl focus:outline-none"
+                        >
+                          <Star
+                            className={`w-8 h-7 cursor-pointer ${
+                              star <= (hoverRating || formData.rating || 0)
+                                ? "text-yellow-400 fill-current"
+                                : "text-gray-300"
+                            }`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="mb-5">
                   <label className="block text-lg font-medium mb-2 text-right" htmlFor="message">
                     رسالتك
                   </label>
@@ -127,7 +196,7 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-[#AA1313] text-white py-3 px-6 rounded-lg hover:bg-opacity-90 transition-all flex items-center justify-center gap-2"
+                  className="w-full bg-[#AA1313] text-white py-3 px-6 rounded-lg hover:bg-red-800 duration-300 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Send className="w-5 h-5" />
                   <span>إرسال الرسالة</span>

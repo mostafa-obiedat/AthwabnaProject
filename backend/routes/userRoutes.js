@@ -9,7 +9,7 @@ router.post("/login", auth.login);
 router.get("/check", authMiddleware, (req, res) => {
   res.json({ isAuthenticated: true, user: req.user });
 });
-router.get("/check", auth.checkAuth);
+// router.get("/check", auth.checkAuth);
 router.get('/profile', authMiddleware, auth.getUserProfile);
 router.put(
   "/profile/update",
@@ -17,8 +17,14 @@ router.put(
   upload.single("profileImage"), // حقل الصورة اسمه profileImage
   auth.updateUserProfile,
 );
-
-router.get('/logout', (req, res) => {
+router.get("/me", authMiddleware, (req, res) => {
+  res.json(req.user);
+});
+router.post('/logout', (req, res) => {
+  res.clearCookie('token'); // أو اسم الكوكيز المستخدم
+  res.status(200).json({ message: "Logged out successfully" });
+});
+router.get('/adminlogout', (req, res) => {
   res.clearCookie('token'); // أو اسم الكوكيز المستخدم
   res.status(200).json({ message: "Logged out successfully" });
 });

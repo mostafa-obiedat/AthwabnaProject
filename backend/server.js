@@ -16,6 +16,7 @@ const workshopRoutes = require('./routes/workshops');
 const workshopDetailsRoutes = require('./routes/workshopDetailsRoutes');
 const paymentRoutes = require("./routes/paymentRoutes");
 const contactRoutes = require("./routes/contactRoutes")
+const accessoriesRoutes = require("./routes/accessoriesRoutes")
 //---------------------------
 // Middleware
 //---------------------------
@@ -49,15 +50,15 @@ app.use("/api/users", userRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/admin", adminProductRoutes);
 app.use("/api/products", productRoutes);
-app.get("/api/auth/check", (req, res) => {
-  if (req.user) {
-    // إذا كان المستخدم مسجل الدخول
-    res.status(200).json({ isAuthenticated: true });
-  } else {
-    // إذا كان المستخدم غير مسجل
-    res.status(200).json({ isAuthenticated: false });
-  }
-});
+// app.get("/api/auth/check", (req, res) => {
+//   if (req.user) {
+//     // إذا كان المستخدم مسجل الدخول
+//     res.status(200).json({ isAuthenticated: true });
+//   } else {
+//     // إذا كان المستخدم غير مسجل
+//     res.status(200).json({ isAuthenticated: false });
+//   }
+// });
 app.use("/api/cart", cartRoutes);
 app.use("/api/checkout", checkoutRoutes);
 app.use("/api/orders", ordersRoutes);
@@ -65,7 +66,7 @@ app.use("/api/favorites", favoriteRoutes);
 app.use('/api/workshops', workshopRoutes);
 app.use('/api/workshops', workshopDetailsRoutes);
 app.use("/api/payments", paymentRoutes);
-app.use("/api", contactRoutes)
+app.use("/api/contacts", contactRoutes)
 // في ملف server.js أو app.js
 
 //---------------------------

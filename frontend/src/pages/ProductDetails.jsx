@@ -1,359 +1,6 @@
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import { useParams, useNavigate } from "react-router-dom"; // استيراد useNavigate
-
-// const ProductDetails = () => {
-//   const [product, setProduct] = useState(null);
-//   const [relatedProducts, setRelatedProducts] = useState([]);
-//   const [isDetailsVisible, setIsDetailsVisible] = useState(true);
-//   const [selectedSize, setSelectedSize] = useState(""); // حالة لتخزين المقاس المختار
-//   const { id } = useParams();
-//   const navigate = useNavigate(); // استخدام useNavigate للتنقل
-
-//   useEffect(() => {
-//     // جلب تفاصيل المنتج
-//     axios.get(`http://localhost:5000/api/products/${id}`)
-//       .then((response) => setProduct(response.data))
-//       .catch((error) => console.error('فشل جلب تفاصيل المنتج:', error));
-
-//     // جلب المنتجات ذات الصلة
-//     axios.get(`http://localhost:5000/api/products/related/men`)
-//       .then((response) => setRelatedProducts(response.data))
-//       .catch((error) => console.error('فشل جلب المنتجات ذات الصلة:', error));
-//   }, [id]);
-
-//   // تبديل عرض التفاصيل
-//   const toggleDetails = () => {
-//     setIsDetailsVisible(!isDetailsVisible);
-//   };
-
-//   // إضافة المنتج إلى السلة
-//   const addToCart = async () => {
-//     if (!selectedSize) {
-//       alert("الرجاء اختيار المقاس");
-//       return;
-//     }
-
-//     try {
-//       const response = await axios.post("http://localhost:5000/api/cart/add", {
-//         productId: product._id,
-//         quantity: 1, // الكمية الافتراضية
-//         size: selectedSize, // المقاس المختار
-//       });
-
-//       if (response.status === 200) {
-//         alert("تمت إضافة المنتج إلى السلة بنجاح");
-//         navigate("/cart"); // الانتقال إلى صفحة السلة
-//       }
-//     } catch (error) {
-//       console.error("فشل إضافة المنتج إلى السلة:", error);
-//       alert("حدث خطأ أثناء إضافة المنتج إلى السلة");
-//     }
-//   };
-
-//   if (!product) {
-//     return <div className="text-center py-5">جاري التحميل...</div>;
-//   }
-
-//   return (
-//     <div className="bg-[#FFF7F2] min-h-screen font-['29LT_Bukra']">
-//       {/* Content */}
-//       <div className="container mx-auto my-8 px-4">
-//         <div className="flex flex-col md:flex-row items-center">
-//           {/* Product Image */}
-//           <div className="md:w-1/3 mb-8 md:mb-0">
-//             <img src={product.images[0]} alt="Product" className="w-80 h-96 border-2 border-gray-700 rounded-lg" />
-//           </div>
-
-//           {/* Product Details */}
-//           <div className="md:w-1/2">
-//             <h3 className="text-2xl font-bold mb-4">{product.name}</h3>
-//             <p className="text-gray-500">السعر السابق: <del>60 دينار</del></p>
-//             <p className="text-red-500 text-xl">السعر: {product.price} دينار</p>
-//             <form className="mt-4">
-//               <div className="mb-4">
-//                 <select
-//                   className="w-full p-2 border border-gray-300 rounded"
-//                   value={selectedSize}
-//                   onChange={(e) => setSelectedSize(e.target.value)} // تحديث المقاس المختار
-//                 >
-//                   <option value="" hidden>اختر المقاس</option>
-//                   {product.size.map((size) => (
-//                     <option key={size} value={size}>{size}</option>
-//                   ))}
-//                 </select>
-//               </div>
-//               <div className="flex space-x-2">
-//                 <button
-//                   className="bg-[#2B2B2B] text-white px-4 py-2 rounded flex-grow flex items-center justify-center"
-//                   onClick={addToCart} // النقر على زر "أضف إلى السلة"
-//                 >
-//                   <i className="bi bi-cart mr-2"></i> أضف الى السلة
-//                 </button>
-//                 <button className="border border-gray-300 px-4 py-2 rounded">
-//                   <i className="bi bi-heart"></i>
-//                 </button>
-//               </div>
-//             </form>
-//             <div className="mt-6">
-//               <h6 className="mb-2">تاريخ التوصيل المتوقع: 9 يناير - 13 يناير</h6>
-//               <h6>ألوان أخرى متوفرة</h6>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Details Section */}
-//         <div className="mt-8 bg-white p-6 border border-black rounded-lg shadow-md w-4/5 mx-auto">
-//           <div className="flex justify-between items-center">
-//             <h3 className="text-xl font-bold">التفاصيل</h3>
-//             <button onClick={toggleDetails} className="text-2xl">
-//               {isDetailsVisible ? "↑" : "↓"}
-//             </button>
-//           </div>
-//           {isDetailsVisible && (
-//             <div className="mt-4">
-//               <h4 className="text-lg font-semibold">{product.name}</h4>
-//               <ul className="list-disc pr-6">
-//                 <li><strong>المواصفات</strong></li>
-//                 {product.color.map((color) => (
-//                   <li key={color}>لون {color}</li>
-//                 ))}
-//               </ul>
-//               <h4 className="text-lg font-semibold mt-4">عن المنتج</h4>
-//               <p className="mt-2">{product.description}</p>
-//             </div>
-//           )}
-//         </div>
-
-//         {/* Related Products */}
-//         <div className="mt-20">
-//           <h4 className="text-xl font-bold mb-4">قد يعجبك أيضاً</h4>
-//           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-//             {relatedProducts.map((product) => (
-//               <div key={product._id} className="bg-white p-4 rounded-lg shadow-md text-center">
-//                 <img src={product.images[0]} alt="Product" className="w-full h-48 object-cover rounded-lg mb-4" />
-//                 <h6 className="font-semibold">{product.name}</h6>
-//                 <p className="text-gray-500">{product.price} دينار</p>
-//                 <div className="flex justify-between mt-4">
-//                   <button className="bg-[#2B2B2B] text-white px-4 py-2 rounded flex-grow flex items-center justify-center">
-//                     <i className="bi bi-cart mr-2"></i> أضف الى السلة
-//                   </button>
-//                   <button className="border border-gray-300 px-4 py-2 rounded">
-//                     <i className="bi bi-heart"></i>
-//                   </button>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ProductDetails;
-
-
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import { useParams, useNavigate } from "react-router-dom"; // استيراد useNavigate
-
-// const ProductDetails = () => {
-//   const [product, setProduct] = useState(null);
-//   const [relatedProducts, setRelatedProducts] = useState([]);
-//   const [isDetailsVisible, setIsDetailsVisible] = useState(true);
-//   const [selectedSize, setSelectedSize] = useState(""); // حالة لتخزين المقاس المختار
-//   const { id } = useParams();
-//   const navigate = useNavigate(); // استخدام useNavigate للتنقل
-
-//   useEffect(() => {
-//     const fetchProductDetails = async () => {
-//       try {
-//         const response = await axios.get(`http://localhost:5000/api/products/${id}`);
-//         setProduct(response.data);
-//       } catch (error) {
-//         console.error('فشل جلب تفاصيل المنتج:', error);
-//         if (error.response) {
-//           console.error('بيانات الخطأ:', error.response.data);
-//           console.error('حالة الخطأ:', error.response.status);
-//           console.error('رأسيات الخطأ:', error.response.headers);
-//         } else if (error.request) {
-//           console.error('لم يتم استلام أي رد من الخادم:', error.request);
-//         } else {
-//           console.error('خطأ في إعداد الطلب:', error.message);
-//         }
-//       }
-//     };
-  
-//     const fetchRelatedProducts = async () => {
-//       try {
-//         const response = await axios.get(`http://localhost:5000/api/products/related/men`);
-//         setRelatedProducts(response.data);
-//       } catch (error) {
-//         console.error('فشل جلب المنتجات ذات الصلة:', error);
-//         if (error.response) {
-//           console.error('بيانات الخطأ:', error.response.data);
-//           console.error('حالة الخطأ:', error.response.status);
-//           console.error('رأسيات الخطأ:', error.response.headers);
-//         } else if (error.request) {
-//           console.error('لم يتم استلام أي رد من الخادم:', error.request);
-//         } else {
-//           console.error('خطأ في إعداد الطلب:', error.message);
-//         }
-//       }
-//     };
-  
-//     fetchProductDetails();
-//     fetchRelatedProducts();
-//   }, [id]);
-
-//   // تبديل عرض التفاصيل
-//   const toggleDetails = () => {
-//     setIsDetailsVisible(!isDetailsVisible);
-//   };
-// // إضافة المنتج إلى السلة
-// const addToCart = () => {
-//   if (!selectedSize) {
-//     alert("الرجاء اختيار المقاس");
-//     return;
-//   }
-
-//   // استرجاع المنتجات من localStorage
-//   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-//   // إنشاء المنتج الجديد
-//   const newItem = {
-//     productId: product._id,
-//     title: product.name,
-//     price: product.price,
-//     image: product.images[0], // تأكد من وجود صورة للمنتج
-//     quantity: 1,
-//     size: selectedSize,
-//   };
-
-//   // البحث عن المنتج في السلة للتحقق من وجوده مسبقًا
-//   const existingItemIndex = cart.findIndex(
-//     (item) => item.productId === product._id && item.size === selectedSize
-//   );
-
-//   if (existingItemIndex !== -1) {
-//     // إذا كان المنتج موجودًا، نقوم بزيادة الكمية
-//     cart[existingItemIndex].quantity += 1;
-//   } else {
-//     // إضافة المنتج الجديد إلى السلة
-//     cart.push(newItem);
-//   }
-
-//   // تحديث السلة في localStorage
-//   localStorage.setItem("cart", JSON.stringify(cart));
-
-//   alert("✅ تمت إضافة المنتج إلى السلة بنجاح");
-// };
-
-  
-//   if (!product) {
-//     return <div className="text-center py-5">جاري التحميل...</div>;
-//   }
-
-//   return (
-//     <div className="bg-[#FFF7F2] min-h-screen font-['29LT_Bukra']">
-//       {/* Content */}
-//       <div className="container mx-auto my-8 px-4">
-//         <div className="flex flex-col md:flex-row items-center">
-//           {/* Product Image */}
-//           <div className="md:w-1/3 mb-8 md:mb-0">
-//             <img src={`http://localhost:5000${product.images[0]}`} alt="Product" className="w-80 h-96 border-2 border-gray-700 rounded-lg" />
-//           </div>
-
-//           {/* Product Details */}
-//           <div className="md:w-1/2">
-//             <h3 className="text-2xl font-bold mb-4">{product.name}</h3>
-//             <p className="text-gray-500">السعر السابق: <del>60 دينار</del></p>
-//             <p className="text-red-500 text-xl">السعر: {product.price} دينار</p>
-//             <form className="mt-4">
-//               <div className="mb-4">
-//                 <select
-//                   className="w-full p-2 border border-gray-300 rounded"
-//                   value={selectedSize}
-//                   onChange={(e) => setSelectedSize(e.target.value)} // تحديث المقاس المختار
-//                 >
-//                   <option value="" hidden>اختر المقاس</option>
-//                   {product.size.map((size) => (
-//                     <option key={size} value={size}>{size}</option>
-//                   ))}
-//                 </select>
-//               </div>
-//               <div className="flex space-x-2">
-//                 <button
-//                   className="bg-[#2B2B2B] text-white px-4 py-2 rounded flex-grow flex items-center justify-center"
-//                   onClick={addToCart} // النقر على زر "أضف إلى السلة"
-//                 >
-//                   <i className="bi bi-cart mr-2"></i> أضف الى السلة
-//                 </button>
-//                 <button className="border border-gray-300 px-4 py-2 rounded">
-//                   <i className="bi bi-heart"></i>
-//                 </button>
-//               </div>
-//             </form>
-//             <div className="mt-6">
-//               <h6 className="mb-2">تاريخ التوصيل المتوقع: 9 يناير - 13 يناير</h6>
-//               <h6>ألوان أخرى متوفرة</h6>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Details Section */}
-//         <div className="mt-8 bg-white p-6 border border-black rounded-lg shadow-md w-4/5 mx-auto">
-//           <div className="flex justify-between items-center">
-//             <h3 className="text-xl font-bold">التفاصيل</h3>
-//             <button onClick={toggleDetails} className="text-2xl">
-//               {isDetailsVisible ? "↑" : "↓"}
-//             </button>
-//           </div>
-//           {isDetailsVisible && (
-//             <div className="mt-4">
-//               <h4 className="text-lg font-semibold">{product.name}</h4>
-//               <ul className="list-disc pr-6">
-//                 <li><strong>المواصفات</strong></li>
-//                 {product.color.map((color) => (
-//                   <li key={color}>لون {color}</li>
-//                 ))}
-//               </ul>
-//               <h4 className="text-lg font-semibold mt-4">عن المنتج</h4>
-//               <p className="mt-2">{product.description}</p>
-//             </div>
-//           )}
-//         </div>
-
-//         {/* Related Products */}
-//         <div className="mt-20">
-//           <h4 className="text-xl font-bold mb-4">قد يعجبك أيضاً</h4>
-//           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-//             {relatedProducts.map((product) => (
-//               <div key={product._id} className="bg-white p-4 rounded-lg shadow-md text-center">
-//                 <img src={`http://localhost:5000${product.images[0]}`} alt="Product" className="w-full h-48 object-cover rounded-lg mb-4" />
-//                 <h6 className="font-semibold">{product.name}</h6>
-//                 <p className="text-gray-500">{product.price} دينار</p>
-//                 <div className="flex justify-between mt-4">
-//                   <button className="bg-[#2B2B2B] text-white px-4 py-2 rounded flex-grow flex items-center justify-center">
-//                     <i className="bi bi-cart mr-2"></i> أضف الى السلة
-//                   </button>
-//                   <button className="border border-gray-300 px-4 py-2 rounded">
-//                     <i className="bi bi-heart"></i>
-//                   </button>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ProductDetails;
-
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../redux/slices/cartSlice'; 
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -384,13 +31,13 @@ const ProductDetails = () => {
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [userRating, setUserRating] = useState(0);
   const [userComment, setUserComment] = useState('');
-
+  const [addedToCart, setAddedToCart] = useState(null);
+  const [timers, setTimers] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   // Constants
   const API_BASE_URL = 'http://localhost:5000/api';
   const DELIVERY_DATE = new Date();
@@ -416,9 +63,6 @@ const ProductDetails = () => {
         setSelectedSize(productRes.data.size[0] || '');
         setSelectedColor(productRes.data.color[0] || '');
         
-        // Check if product is in wishlist
-        const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-        setIsWishlisted(wishlist.some(item => item.productId === productRes.data._id));
       } catch (err) {
         console.error('Error fetching data:', err);
         setError(err.response?.data?.message || 'حدث خطأ أثناء تحميل البيانات');
@@ -432,7 +76,7 @@ const ProductDetails = () => {
   }, [id]);
 
   // Add to cart function
-  const addToCart = (e) => {
+  const addToCartHandler = (e, product) => {
     e.preventDefault();
     
     if (!selectedSize) {
@@ -449,7 +93,9 @@ const ProductDetails = () => {
       image: product.images[0],
       quantity: quantity,
       size: selectedSize,
-      color: selectedColor
+      availableSizes: product.size,
+      color: selectedColor,
+      discount: product.discount,
     };
 
     const existingItemIndex = cart.findIndex(
@@ -465,27 +111,26 @@ const ProductDetails = () => {
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
+    dispatch(addToCart(newItem));
+    setAddedToCart(product._id);
+    setTimeout(() => setAddedToCart(null), 2000);
     toast.success('تمت إضافة المنتج إلى السلة بنجاح');
   };
 
-  // Toggle wishlist
-  const toggleWishlist = () => {
-    let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-    
-    if (isWishlisted) {
-      wishlist = wishlist.filter(item => item.productId !== product._id);
-    } else {
-      wishlist.push({
-        productId: product._id,
-        title: product.name,
-        price: product.price,
-        image: product.images[0]
-      });
+  const addToFavorites = async (e, productId) => {
+    e.stopPropagation();
+
+    try {
+      await axios.post(
+        "http://localhost:5000/api/favorites/add",
+        { productId },
+        { withCredentials: true }
+      );
+      toast.success("تمت الإضافة إلى المفضلة بنجاح!");
+    } catch (err) {
+      console.error("خطأ أثناء إضافة المفضلة:", err);
+      toast.error("يجب تسجيل الدخول أولًا لإضافة إلى المفضلة");
     }
-    
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
-    setIsWishlisted(!isWishlisted);
-    toast.success(isWishlisted ? 'تمت الإزالة من المفضلة' : 'تمت الإضافة إلى المفضلة');
   };
 
   // Submit rating
@@ -538,7 +183,35 @@ const ProductDetails = () => {
     }
     return stars;
   };
+useEffect(() => {
+    const interval = setInterval(() => {
+      const newTimers = {};
+      relatedProducts.forEach(product => {
+        // إذا كان المنتج له تاريخ انتهاء
+        if (product.offerEndDate) {
+          const end = new Date(product.offerEndDate).getTime();
+          const now = new Date().getTime();
+          const distance = end - now;
 
+          if (distance > 0) {
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            newTimers[product._id] = `${days} يوم / ${hours} ساعة`;
+          } else {
+            newTimers[product._id] = 'انتهى العرض';
+            fetchData();
+          }
+        } else {
+          // إذا لم يكن له تاريخ انتهاء، نعرض "عرض مستمر"
+          newTimers[product._id] = 'عرض مستمر';
+        }
+      });
+      setTimers(newTimers);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [relatedProducts]);
+  
   // Loading state
   if (loading) {
     return (
@@ -580,10 +253,8 @@ const ProductDetails = () => {
     );
   }
 
-  // Calculate original price (for discount display)
-  const originalPrice = Math.round(product.price * 1.25);
-  const discountPercentage = Math.round(((originalPrice - product.price) / originalPrice) * 100);
-
+  const finalPrice = product.price - (product.price * product.discount / 100);
+  
   return (
     <div className="min-h-screen">
       <Toaster position="top-center" reverseOrder={false} />
@@ -592,7 +263,7 @@ const ProductDetails = () => {
         <div className="container mx-auto px-4">
           <button 
             onClick={() => navigate(-1)} 
-            className="flex items-center text-gray-600 hover:text-gray-800"
+            className="flex items-center text-red-700 hover:text-red-800 cursor-pointer"
           >
             <FaArrowLeft className="ml-2" /> العودة
           </button>
@@ -600,7 +271,7 @@ const ProductDetails = () => {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto py-8 px-4">
+      <div className="container mx-auto py-8 px-4 text-[#2B2B2B]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Product Images */}
           <div>
@@ -647,17 +318,17 @@ const ProductDetails = () => {
 
             {/* Price Section */}
             <div className="space-y-2">
-              {discountPercentage > 0 && (
+              {product.discount > 0 && (
                 <>
                   <p className="text-gray-500">
-                    السعر السابق: <del>{originalPrice} د.ع</del>
+                    السعر السابق: <del>{product.price} د.أ</del>
                   </p>
                   <span className="bg-red-100 text-red-600 px-2 py-1 rounded text-sm">
-                    خصم {discountPercentage}%
+                    خصم {product.discount}%
                   </span>
                 </>
               )}
-              <p className="text-2xl font-bold">{product.price} د.أ</p>
+              <p className="text-xl font-bold mt-2">السعر <span className='text-xl text-red-700'>{finalPrice}</span> د.أ</p>
             </div>
 
             {/* Size Selection */}
@@ -670,8 +341,8 @@ const ProductDetails = () => {
                     onClick={() => setSelectedSize(size)}
                     className={`px-4 py-2 rounded border ${
                       selectedSize === size
-                        ? 'bg-[#2B2B2B] text-white border-gray-800'
-                        : 'bg-white border-gray-300 hover:border-gray-400'
+                        ? 'bg-[#2B2B2B] text-white border-gray-800 cursor-pointer'
+                        : 'bg-white border-gray-300 hover:border-gray-400 cursor-pointer'
                     }`}
                   >
                     {size}
@@ -725,15 +396,18 @@ const ProductDetails = () => {
             {/* Action Buttons */}
             <div className="flex gap-4 pt-4">
               <button
-                onClick={addToCart}
-                className="flex-1 bg-[#2B2B2B] hover:bg-[#2B2B2B] text-white py-3 px-6 rounded flex items-center justify-center gap-2 cursor-pointer"
+                onClick={(e) => addToCartHandler(e, product)}
+                className="flex-1 bg-[#2B2B2B] hover:bg-[#222222] text-white py-3 px-6 rounded flex items-center justify-center gap-2 cursor-pointer"
               >
                 <FaShoppingCart /> أضف إلى السلة
               </button>
               <button
-                onClick={toggleWishlist}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToFavorites(e, product._id);
+                }}
                 className={`p-3 rounded border ${
-                  isWishlisted
+                  false
                     ? 'text-red-500 border-red-500 cursor-pointer'
                     : 'text-gray-500 border-gray-300 hover:border-gray-400 cursor-pointer'
                 }`}
@@ -747,7 +421,7 @@ const ProductDetails = () => {
               <h3 className="font-semibold mb-3">معلومات الشحن</h3>
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
-                  <FaShippingFast className="text-gray-700 mt-1" />
+                  <FaShippingFast className="mt-1" />
                   <div>
                     <p className="font-medium">
                       التوصيل المتوقع: {DELIVERY_DATE.toLocaleDateString('ar-IQ')}
@@ -758,7 +432,7 @@ const ProductDetails = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <FaExchangeAlt className="text-gray-700 mt-1" />
+                  <FaExchangeAlt className="mt-1" />
                   <div>
                     <p className="font-medium">الإرجاع والاستبدال</p>
                     <p className="text-sm text-gray-500">
@@ -870,29 +544,31 @@ const ProductDetails = () => {
     
 {/* Related Products */}
 {relatedProducts.length > 0 && (
-  <div className="mt-16">
-    <div className="flex justify-between items-center mb-6 pb-2 border-b border-gray-200">
-      <h2 className="text-xl">
+  <div className="mt-8 sm:mt-12 md:mt-16">
+    <div className="flex justify-between items-center mb-4 sm:mb-6 pb-2 border-b border-gray-200">
+      <h2 className="text-red-700 text-base sm:text-lg md:text-xl font-semibold">
         منتجات ذات صلة
       </h2>
-      <div className="custom-next-button  flex items-center space-x-2 rtl:space-x-reverse">
-      <button className="w-8 h-8 flex items-center justify-center rounded-full  hover:bg-gray-100 text-gray-600 transition-colors cursor-pointer">
-          <FaArrowLeft size={16} className="transform rotate-180"/>
+      <div className="custom-next-button flex items-center space-x-1 sm:space-x-2 rtl:space-x-reverse">
+        <button className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-600 transition-colors cursor-pointer">
+          <FaArrowLeft size={14} className="transform rotate-180 sm:text-base" />
         </button>
-        <button className="custom-prev-button w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-600 transition-colors cursor-pointer">
-          <FaArrowLeft size={16}/>
+        <button className="custom-prev-button w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-600 transition-colors cursor-pointer">
+          <FaArrowLeft size={14} className="sm:text-base" />
         </button>
       </div>
     </div>
     
     <Swiper
       modules={[Autoplay, Navigation, Pagination]}
-      spaceBetween={20}
-      slidesPerView={Math.min(4, relatedProducts.length)}
+      spaceBetween={10}
+      slidesPerView={1.2}
       breakpoints={{
-        640: { slidesPerView: Math.min(2, relatedProducts.length) },
-        768: { slidesPerView: Math.min(3, relatedProducts.length) },
-        1024: { slidesPerView: Math.min(4, relatedProducts.length) }
+        320: { slidesPerView: Math.min(1.2, relatedProducts.length), spaceBetween: 10 },
+        480: { slidesPerView: Math.min(1.8, relatedProducts.length), spaceBetween: 15 },
+        640: { slidesPerView: Math.min(2, relatedProducts.length), spaceBetween: 15 },
+        768: { slidesPerView: Math.min(3, relatedProducts.length), spaceBetween: 20 },
+        1024: { slidesPerView: Math.min(4, relatedProducts.length), spaceBetween: 20 }
       }}
       autoplay={{
         delay: 2500,
@@ -915,9 +591,10 @@ const ProductDetails = () => {
     >
       {relatedProducts.map((related) => (
         <SwiperSlide key={related._id}>
-          <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition flex flex-col h-full mx-2 max-w-[300px]">
-            <div 
-              className="relative h-48 overflow-hidden cursor-pointer"
+          <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 flex flex-col h-full mx-1 sm:mx-2 max-w-full sm:max-w-[300px]">
+            {/* الصورة */}
+            <div
+              className="relative h-32 xs:h-36 sm:h-40 md:h-48 overflow-hidden cursor-pointer"
               onClick={() => navigate(`/product/${related._id}`)}
             >
               <img
@@ -926,32 +603,80 @@ const ProductDetails = () => {
                 className="w-full h-full object-cover hover:scale-105 transition duration-300"
               />
               {related._id === product._id && (
-                <div className="absolute top-2 left-2 bg-gray-800 text-white text-xs px-2 py-1 rounded">
+                <div className="bg-red-700 text-white absolute top-1 sm:top-2 right-1 sm:right-2 text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded z-10">
                   المنتج الحالي
                 </div>
               )}
+              {related.discount > 0 && (
+                <div className="absolute top-1 sm:top-2 left-1 sm:left-2 bg-red-100 text-red-600 text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded z-10">
+                  خصم {related.discount}%
+                </div>
+              )}
             </div>
-            <div className="p-4 flex-grow">
-              <h3 className="font-semibold text-lg mb-1 truncate">
+      
+            {/* المحتوى */}
+            <div className="p-2 sm:p-3 md:p-4 flex flex-col flex-grow">
+              <h3 className="font-semibold text-xs sm:text-sm md:text-lg mb-1 truncate">
                 {related.name}
               </h3>
-              <div className="flex items-center mb-2">
+              
+              <div className="flex items-center mb-1 sm:mb-2">
                 {renderStars(related.averageRating || 0)}
                 <span className="text-gray-500 text-xs mr-1">
                   ({related.ratings?.length || 0})
                 </span>
               </div>
-              <p className="text-gray-800 font-bold mb-4">
-                {related.price} د.أ
-              </p>
+      
+              {/* قسم الأسعار - ارتفاع ثابت */}
+              <div className="min-h-[50px] sm:min-h-[60px] flex flex-col justify-center">
+                <div className="flex items-center gap-1 sm:gap-2">
+                  {related.discount > 0 ? (
+                    <>
+                      <p className="text-red-700 font-bold text-xs sm:text-sm md:text-base">
+                        {related.price - (related.price * related.discount) / 100} د.أ
+                      </p>
+                      <p className="line-through text-xs text-gray-500">
+                        {related.price} د.أ
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-red-700 font-bold text-xs sm:text-sm md:text-base">
+                      {related.price} د.أ
+                    </p>
+                  )}
+                </div>
+      
+                {related.discount > 0 && (
+                  <div className="mt-1">
+                    {related.offerEndDate ? (
+                      <span className="text-[8.6px] bg-red-100 text-red-600 px-1 sm:px-2 py-0.5 sm:py-1 rounded">
+                        ينتهي خلال: {timers[related._id] || '...'}
+                      </span>
+                    ) : (
+                      <span className="text-[8px] xs:text-[8.6px] sm:text-xs bg-green-100 text-green-600 px-1 sm:px-2 py-0.5 sm:py-1 rounded">
+                        عرض مستمر
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+      
+              {/* المقاسات */}
+              {related.size?.length > 0 && (
+                <p className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2 truncate">
+                  المقاسات: {related.size.join(', ')}
+                </p>
+              )}
             </div>
-            <div className="p-4 pt-0">
+      
+            {/* الزر */}
+            <div className="p-2 sm:p-3 md:p-4 pt-0">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   navigate(`/product/${related._id}`);
                 }}
-                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-4 rounded transition"
+                className={`w-full bg-[#2B2B2B] hover:bg-[#222222] text-white py-1 sm:py-2 px-2 sm:px-3 md:px-4 rounded transition-all duration-300 hover:shadow cursor-pointer text-xs sm:text-sm`}
               >
                 عرض المنتج
               </button>
@@ -962,25 +687,39 @@ const ProductDetails = () => {
     </Swiper>
     
     {/* Custom Pagination */}
-    <div className="custom-pagination flex justify-center mt-6"></div>
+    <div className="custom-pagination flex justify-center mt-4 sm:mt-6"></div>
     
     {/* Add CSS to your component or global styles */}
     <style jsx>{`
       .custom-bullet {
-        width: 8px;
-        height: 8px;
+        width: 6px;
+        height: 6px;
         display: inline-block;
         border-radius: 50%;
         background: #ccc;
-        margin: 0 4px;
+        margin: 0 3px;
         cursor: pointer;
         transition: all 0.3s ease;
       }
       
+      @media (min-width: 640px) {
+        .custom-bullet {
+          width: 8px;
+          height: 8px;
+          margin: 0 4px;
+        }
+      }
+      
       .custom-bullet-active {
         background: #2B2B2B;
-        width: 24px;
+        width: 18px;
         border-radius: 4px;
+      }
+      
+      @media (min-width: 640px) {
+        .custom-bullet-active {
+          width: 24px;
+        }
       }
     `}</style>
   </div>
@@ -1010,268 +749,3 @@ const getColorHex = (color) => {
 
 export default ProductDetails;
 
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import { useParams, useNavigate } from "react-router-dom";
-// import { FaShoppingCart, FaHeart, FaArrowLeft, FaCheck, FaShippingFast, FaExchangeAlt, FaStar } from "react-icons/fa";
-
-// const ProductDetails = () => {
-//   const [product, setProduct] = useState(null);
-//   const [relatedProducts, setRelatedProducts] = useState([]);
-//   const [isDetailsVisible, setIsDetailsVisible] = useState(true);
-//   const [selectedSize, setSelectedSize] = useState("");
-//   const [selectedImage, setSelectedImage] = useState(0);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-//   const [isAddedToCart, setIsAddedToCart] = useState(false);
-//   const [rating, setRating] = useState(0);  // للتقييم
-//   const { id } = useParams();
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     window.scrollTo(0, 0);
-    
-//     const fetchProductDetails = async () => {
-//       setLoading(true);
-//       try {
-//         const response = await axios.get(`http://localhost:5000/api/products/${id}`);
-//         setProduct(response.data);
-//         setError(null);
-//         setRating(response.data.averageRating || 0);  // تحميل التقييمات
-//       } catch (error) {
-//         console.error('فشل جلب تفاصيل المنتج:', error);
-//         setError("حدث خطأ أثناء تحميل تفاصيل المنتج");
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-  
-//     const fetchRelatedProducts = async () => {
-//       try {
-//         const response = await axios.get(`http://localhost:5000/api/products/related/men`);
-//         setRelatedProducts(response.data);
-//       } catch (error) {
-//         console.error('فشل جلب المنتجات ذات الصلة:', error);
-//       }
-//     };
-  
-//     fetchProductDetails();
-//     fetchRelatedProducts();
-//   }, [id]);
-
-//   const toggleDetails = () => {
-//     setIsDetailsVisible(!isDetailsVisible);
-//   };
-
-//   const handleRelatedProductClick = (productId) => {
-//     navigate(`/product/${productId}`);
-//   };
-
-//   const addToCart = (e) => {
-//     e.preventDefault();
-    
-//     if (!selectedSize) {
-//       const sizeError = document.getElementById("size-error");
-//       if (sizeError) {
-//         sizeError.classList.remove("hidden");
-//         setTimeout(() => {
-//           sizeError.classList.add("hidden");
-//         }, 3000);
-//       }
-//       return;
-//     }
-
-//     let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-//     const newItem = {
-//       productId: product._id,
-//       title: product.name,
-//       price: product.price,
-//       image: product.images[0],
-//       quantity: 1,
-//       size: selectedSize,
-//     };
-
-//     const existingItemIndex = cart.findIndex(
-//       (item) => item.productId === product._id && item.size === selectedSize
-//     );
-
-//     if (existingItemIndex !== -1) {
-//       cart[existingItemIndex].quantity += 1;
-//     } else {
-//       cart.push(newItem);
-//     }
-
-//     localStorage.setItem("cart", JSON.stringify(cart));
-    
-//     setIsAddedToCart(true);
-//     setTimeout(() => {
-//       setIsAddedToCart(false);
-//     }, 3000);
-//   };
-  
-//   const handleRatingChange = (newRating) => {
-//     setRating(newRating);
-//   };
-
-//   if (loading) {
-//     return (
-//       <div className="bg-[#FFF7F2] min-h-screen flex justify-center items-center">
-//         <div className="animate-pulse flex flex-col items-center">
-//           <div className="w-16 h-16 border-4 border-[#2B2B2B] border-t-transparent rounded-full animate-spin"></div>
-//           <p className="mt-4 text-lg font-medium text-gray-700">جاري تحميل تفاصيل المنتج...</p>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   if (error) {
-//     return (
-//       <div className="bg-[#FFF7F2] min-h-screen flex justify-center items-center p-4">
-//         <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
-//           <div className="text-red-500 text-5xl mb-4">
-//             <span role="img" aria-label="error">⚠️</span>
-//           </div>
-//           <h2 className="text-2xl font-bold mb-4">حدث خطأ</h2>
-//           <p className="text-gray-600 mb-6">{error}</p>
-//           <div className="flex justify-center space-x-4 space-x-reverse">
-//             <button 
-//               onClick={() => navigate(-1)}
-//               className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition"
-//             >
-//               العودة للخلف
-//             </button>
-//             <button 
-//               onClick={() => window.location.reload()}
-//               className="px-4 py-2 bg-[#2B2B2B] text-white rounded-md hover:bg-black transition"
-//             >
-//               إعادة المحاولة
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   if (!product) {
-//     return (
-//       <div className="bg-[#FFF7F2] min-h-screen flex justify-center items-center">
-//         <div className="text-center p-8">
-//           <h2 className="text-2xl font-bold mb-4">هذا المنتج غير متوفر</h2>
-//           <button 
-//             onClick={() => navigate(-1)}
-//             className="px-6 py-2 bg-[#2B2B2B] text-white rounded-md hover:bg-black transition flex items-center justify-center mx-auto"
-//           >
-//             <FaArrowLeft className="ml-2" /> العودة للتسوق
-//           </button>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   const originalPrice = Math.round(product.price * 1.25);
-
-//   return (
-//     <div className="bg-[#FFF7F2] min-h-screen font-['29LT_Bukra']">
-//       {isAddedToCart && (
-//         <div className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-md shadow-lg z-50 flex items-center gap-2 animate-fade-in">
-//           <FaCheck /> تمت إضافة المنتج إلى السلة بنجاح
-//         </div>
-//       )}
-
-//       <div id="size-error" className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-md shadow-lg z-50 flex items-center gap-2 hidden">
-//         <span role="img" aria-label="warning">⚠️</span> الرجاء اختيار المقاس
-//       </div>
-
-//       <div className="bg-white shadow-sm">
-//         <div className="container mx-auto py-4 px-4">
-//           <button 
-//             onClick={() => navigate(-1)} 
-//             className="flex items-center text-gray-600 hover:text-[#2B2B2B] transition"
-//           >
-//             <FaArrowLeft className="ml-2" /> العودة للتسوق
-//           </button>
-//         </div>
-//       </div>
-
-//       <div className="container mx-auto py-8 px-4">
-//         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-//           <div className="space-y-6">
-//             <div className="bg-white rounded-lg p-4 shadow-md">
-//               <img 
-//                 src={`http://localhost:5000${product.images[selectedImage]}`} 
-//                 alt={product.name} 
-//                 className="w-full h-96 object-contain rounded-md"
-//               />
-//             </div>
-
-//             <div className="flex justify-center space-x-4 space-x-reverse">
-//               {product.images.map((image, index) => (
-//                 <div 
-//                   key={index}
-//                   onClick={() => setSelectedImage(index)}
-//                   className={`w-20 h-20 rounded-md cursor-pointer p-1 ${selectedImage === index ? 'border-2 border-[#2B2B2B]' : 'border border-gray-300'}`}
-//                 >
-//                   <img 
-//                     src={`http://localhost:5000${image}`} 
-//                     alt={`${product.name} - ${index + 1}`} 
-//                     className="w-full h-full object-cover rounded"
-//                   />
-//                 </div>
-//               ))}
-//             </div>
-//           </div>
-
-//           <div className="space-y-6">
-//             <div>
-//               <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-//               <div className="flex items-center gap-2 mb-4">
-//                 <div className="flex text-yellow-400">
-//                   {[1, 2, 3, 4, 5].map(star => (
-//                     <FaStar key={star} />
-//                   ))}
-//                 </div>
-//                 <span className="text-gray-500">({product.ratings.length} تقييم)</span>
-//               </div>
-              
-//               <div className="space-y-2">
-//                 <p className="text-gray-500">السعر السابق: <del>{originalPrice} دينار</del></p>
-//                 <p className="text-xl text-[#2B2B2B]">{product.price} دينار</p>
-//               </div>
-
-//               <div className="space-y-2">
-//                 <p className="text-lg font-semibold">المقاسات المتوفرة</p>
-//                 <div className="flex gap-2">
-//                   {product.size.map((size, index) => (
-//                     <button 
-//                       key={index}
-//                       onClick={() => setSelectedSize(size)}
-//                       className={`px-4 py-2 border rounded-lg ${selectedSize === size ? 'bg-[#2B2B2B] text-white' : 'bg-gray-100'}`}
-//                     >
-//                       {size}
-//                     </button>
-//                   ))}
-//                 </div>
-//               </div>
-//               <button 
-//                 onClick={addToCart}
-//                 className="w-full py-3 bg-[#2B2B2B] text-white rounded-md flex items-center justify-center gap-2 hover:bg-black transition"
-//               >
-//                 <FaShoppingCart /> إضافة إلى السلة
-//               </button>
-//             </div>
-
-//             <div className="bg-[#F7F7F7] rounded-lg p-4">
-//               <div className="flex items-center gap-2">
-//                 <FaShippingFast className="text-[#2B2B2B]" />
-//                 <span>شحن مجاني</span>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ProductDetails;

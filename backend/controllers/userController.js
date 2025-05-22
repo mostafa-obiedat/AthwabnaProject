@@ -8,12 +8,12 @@ const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "1d" });
 };
 
-exports.checkAuth = (req, res) => {
-  res.status(200).json({
-    isAuthenticated: true,
-    user: req.user,
-  });
-};
+// exports.checkAuth = (req, res) => {
+//   res.status(200).json({
+//     isAuthenticated: true,
+//     user: req.user,
+//   });
+// };
 // تسجيل مستخدم جديد
 exports.register = async (req, res) => {
   try {
@@ -86,7 +86,7 @@ exports.getUserProfile = async (req, res) => {
     res.json({
       user: {
         id: user._id,
-        name: user.username,
+        username: user.username,
         email: user.email,
         phonenumber: user.phonenumber,
         profileImage: user.profileImage,
@@ -105,10 +105,10 @@ exports.getUserProfile = async (req, res) => {
 exports.updateUserProfile = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { name, email, phonenumber } = req.body;
+    const { username, email, phonenumber } = req.body; // تغيير من name إلى username
 
     const updatedFields = {
-      name,
+      username, // استخدام username بدلاً من name
       email,
       phonenumber,
       updatedAt: Date.now(),
@@ -118,18 +118,28 @@ exports.updateUserProfile = async (req, res) => {
       updatedFields.profileImage = `/uploads/${req.file.filename}`;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(userId, updatedFields, {
-      new: true,
-    });
+    const updatedUser = await User.findByIdAndUpdate(
+      userId, 
+      updatedFields, 
+      { 
+        new: true,
+        select: 'username email phonenumber profileImage createdAt' // تحديث الحقول المطلوبة
+      }
+    ).lean();
 
     if (!updatedUser) {
       return res.status(404).json({ message: "المستخدم غير موجود" });
     }
 
-    res.status(200).json({ message: "تم التحديث بنجاح", updatedUser });
+    res.status(200).json({ 
+      message: "تم التحديث بنجاح",
+      username: updatedUser.username // إرجاع username بدلاً من user
+    });
   } catch (error) {
     console.error("❌ خطأ في تحديث البروفايل:", error);
-    res.status(500).json({ message: "فشل في تحديث البيانات" });
+    res.status(500).json({ 
+      message: "فشل في تحديث البيانات",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 };
-

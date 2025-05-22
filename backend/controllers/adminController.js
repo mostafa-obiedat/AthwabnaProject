@@ -5,6 +5,7 @@ const Product = require('../models/Product');
 const User = require('../models/User');
 const Contact = require("../models/Contact")
 const Workshop = require("../models/Workshop")
+const Notification = require("../models/Notification");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
 
@@ -222,26 +223,64 @@ exports.getOverviewStats = async (req, res) => {
     }
 };
 
+// Get products with pagination and search
 exports.getProducts = async (req, res) => {
     try {
-        const products = await Product.find();
-        res.json({ data: products });
+        const { page = 1, limit = 10, search = "" } = req.query;
+
+        const query = {
+            name: { $regex: search, $options: "i" } // بحث غير حساس لحالة الأحرف
+        };
+
+        const total = await Product.countDocuments(query);
+        const products = await Product.find(query)
+            .skip((page - 1) * limit)
+            .limit(Number(limit));
+
+        res.json({
+            data: products,
+            total,
+            page: Number(page),
+            totalPages: Math.ceil(total / limit)
+        });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Failed to fetch products' });
+        res.status(500).json({ error: "Failed to fetch products" });
     }
 };
 
-// Get all workshops
+
+// Get all workshops with search and pagination
 exports.getWorkshops = async (req, res) => {
     try {
-        const workshops = await Workshop.find();
-        res.json(workshops);
+      const page = parseInt(req.query.page) || 1; // Current page
+      const limit = parseInt(req.query.limit) || 6; // Items per page
+      const skip = (page - 1) * limit;
+      const search = req.query.search || "";
+  
+      const query = {
+        title: { $regex: search, $options: "i" },
+      };
+  
+      const [workshops, total] = await Promise.all([
+        Workshop.find(query)
+          .skip(skip)
+          .limit(limit)
+          .sort({ createdAt: -1 }),
+        Workshop.countDocuments(query),
+      ]);
+  
+      res.json({
+        workshops,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      });
     } catch (err) {
-        res.status(500).json({ error: "Server error" });
+      console.error("Error fetching workshops:", err);
+      res.status(500).json({ error: "Server error" });
     }
-};
-
+  };
+  
 // Create new workshop
 exports.createWorkshop = async (req, res) => {
     try {
@@ -291,23 +330,39 @@ exports.deleteWorkshop = async (req, res) => {
     }
 };
 
-// Get all customers
+// Get all customers with pagination and search
 exports.getCustomers = async (req, res) => {
     try {
-        const customers = await User.find({ role: "user" })
-            .select("-password") // إخفاء كلمة المرور
-            .populate("savedAddresses")
-            .populate("orders")
-            .populate("coupons")
-            .populate("likedProducts");
-
-        res.json({ data: customers });
+      const { page = 1, limit = 10, search = "" } = req.query;
+  
+      const query = {
+        role: "user",
+        username: { $regex: search, $options: "i" },
+      };
+  
+      const customers = await User.find(query)
+        .select("-password")
+        .populate("savedAddresses")
+        .populate("orders")
+        .populate("coupons")
+        .populate("likedProducts")
+        .limit(Number(limit))
+        .skip((Number(page) - 1) * Number(limit));
+  
+      const total = await User.countDocuments(query);
+  
+      res.json({
+        data: customers,
+        currentPage: Number(page),
+        totalPages: Math.ceil(total / limit),
+        totalCustomers: total,
+      });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Failed to fetch customers" });
+      console.error(error);
+      res.status(500).json({ error: "Failed to fetch customers" });
     }
-};
-
+  };
+  
 
 // تعديل بيانات مستخدم
 exports.updateUser = async (req, res) => {
@@ -348,20 +403,38 @@ exports.deleteUser = async (req, res) => {
 };
 
 
-// Get all orders
+// Get all orders with pagination
 exports.getOrders = async (req, res) => {
     try {
-        const orders = await Order.find().populate('shippingAddress');
-        res.json({ data: orders });
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const totalOrders = await Order.countDocuments();
+        const totalPages = Math.ceil(totalOrders / limit);
+
+        const orders = await Order.find()
+            .populate('shippingAddress')
+            .sort({ createdAt: -1 }) // أحدث الطلبات أولاً
+            .skip(skip)
+            .limit(limit);
+
+        res.json({
+            data: orders,
+            currentPage: page,
+            totalPages,
+            totalOrders
+        });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Failed to fetch orders' });
+        res.status(500).json({ error: 'فشل في جلب الطلبات' });
     }
 };
 
+
 // Get all messages
 exports.getMessages = async (req, res) => {
-    const messages = await Contact.find().sort({ createdAt: -1 });
+    const messages = await Contact.find({ messageType: "inquiry" }).sort({ createdAt: -1 });
     res.json(messages);
 };
 
@@ -446,5 +519,23 @@ exports.updatePassword = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
+
+exports.getNotifications = async (req, res) => {
+    try {
+      const notifications = await Notification.find().sort({ createdAt: -1 }).limit(20);
+      res.json({ data: notifications });
+    } catch (error) {
+      res.status(500).json({ error: "Error fetching notifications" });
+    }
+  };
+  
+  exports.markAsRead = async (req, res) => {
+    try {
+      await Notification.findByIdAndUpdate(req.params.id, { isRead: true });
+      res.json({ message: "Marked as read" });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update notification" });
+    }
+  };
 
 

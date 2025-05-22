@@ -79,6 +79,7 @@
 // };
 
 // export default AutoSlider;
+
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FaChevronRight, FaChevronLeft, FaPlay, FaPause } from "react-icons/fa";
@@ -129,14 +130,14 @@ const AutoSlider = () => {
   useEffect(() => {
     // Auto slider logic
     if (isPaused) return;
-    
+
     resetProgress();
-    
+
     // Update progress bar every 50ms
     const interval = 5000; // 5 seconds per slide
     const step = 50; // update every 50ms
     const increment = (step / interval) * 100;
-    
+
     progressRef.current = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
@@ -145,7 +146,7 @@ const AutoSlider = () => {
         return prev + increment;
       });
     }, step);
-    
+
     // Change slide when progress reaches 100%
     const timer = setTimeout(() => {
       if (!isPaused) {
@@ -153,7 +154,7 @@ const AutoSlider = () => {
         setCurrent((prev) => (prev + 1) % slides.length);
       }
     }, interval);
-    
+
     return () => {
       clearTimeout(timer);
       clearInterval(progressRef.current);
@@ -165,19 +166,19 @@ const AutoSlider = () => {
     setCurrent(index);
     resetProgress();
   };
-  
+
   const nextSlide = () => {
     setDirection(1);
     setCurrent((prev) => (prev + 1) % slides.length);
     resetProgress();
   };
-  
+
   const prevSlide = () => {
     setDirection(-1);
     setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
     resetProgress();
   };
-  
+
   const togglePause = () => {
     setIsPaused(!isPaused);
   };
@@ -233,8 +234,8 @@ const AutoSlider = () => {
 
   const buttonVariants = {
     hidden: { scale: 0.8, opacity: 0 },
-    visible: { 
-      scale: 1, 
+    visible: {
+      scale: 1,
       opacity: 1,
       transition: {
         duration: 0.5,
@@ -243,7 +244,7 @@ const AutoSlider = () => {
         stiffness: 200,
       }
     },
-    hover: { 
+    hover: {
       scale: 1.05,
       y: -5,
       boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
@@ -260,8 +261,8 @@ const AutoSlider = () => {
 
   return (
     <div style={{ backgroundColor: lightBgColor }} className="py-16 px-4">
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         className="max-w-7xl mx-auto relative overflow-hidden rounded-3xl shadow-2xl"
         style={{
           backgroundColor: bgColor,
@@ -270,10 +271,10 @@ const AutoSlider = () => {
       >
         {/* Background overlay - ثابت الآن مع اللون المحدد */}
         <div className="absolute inset-0 bg-black opacity-10 z-0"></div>
-        
+
         {/* Progress bar */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gray-200 z-10">
-          <motion.div 
+          <motion.div
             className="h-full bg-red-800" // تم تغيير اللون
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
@@ -308,7 +309,7 @@ const AutoSlider = () => {
                 </div>
 
                 {/* Text section */}
-                <motion.div 
+                <motion.div
                   className="w-full md:w-2/5 text-right flex flex-col justify-center h-full px-6 md:px-12"
                   variants={textContainerVariants}
                   initial="hidden"
@@ -320,23 +321,23 @@ const AutoSlider = () => {
                   >
                     {`الشريحة ${current + 1} من ${slides.length}`}
                   </motion.div>
-                  
-                  <motion.h3 
+
+                  <motion.h3
                     variants={textItemVariants}
                     className="text-4xl font-bold text-white mb-4"
                   >
                     {slides[current].title}
                   </motion.h3>
-                  
-                  <motion.p 
+
+                  <motion.p
                     variants={textItemVariants}
                     className="text-lg text-gray-300 mb-8 leading-relaxed"
                   >
                     {slides[current].subtitle}
                   </motion.p>
-                  
+
                   <motion.div variants={textItemVariants}>
-                    <motion.div 
+                    <motion.div
                       variants={buttonVariants}
                       whileHover="hover"
                     >
@@ -360,9 +361,9 @@ const AutoSlider = () => {
               className="bg-white bg-opacity-80 backdrop-filter backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-opacity-100 transition-all duration-300 hover:scale-110"
               aria-label="السابق"
             >
-              <FaChevronLeft className="text-gray-800" />
+              <FaChevronRight className="text-gray-800" />
             </button>
-            
+
             <button
               onClick={togglePause}
               className="bg-white bg-opacity-80 backdrop-filter backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-opacity-100 transition-all duration-300"
@@ -370,13 +371,13 @@ const AutoSlider = () => {
             >
               {isPaused ? <FaPlay className="text-gray-800" /> : <FaPause className="text-gray-800" />}
             </button>
-            
+
             <button
               onClick={nextSlide}
               className="bg-white bg-opacity-80 backdrop-filter backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-opacity-100 transition-all duration-300 hover:scale-110"
               aria-label="التالي"
             >
-              <FaChevronRight className="text-gray-800" />
+              <FaChevronLeft className="text-gray-800" />
             </button>
           </div>
 
@@ -389,12 +390,11 @@ const AutoSlider = () => {
                 className="group flex items-center gap-2"
                 aria-label={`الانتقال إلى الشريحة ${index + 1}`}
               >
-                <span 
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === current 
-                      ? "bg-red-800 w-2 h-8" 
-                      : "bg-white bg-opacity-50 group-hover:bg-opacity-80"
-                  }`}
+                <span
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${index === current
+                    ? "bg-red-800 w-2 h-8"
+                    : "bg-white bg-opacity-50 group-hover:bg-opacity-80"
+                    }`}
                 />
                 {index === current && (
                   <span className="text-xs font-medium text-white bg-black bg-opacity-30 px-2 py-1 rounded-full backdrop-filter backdrop-blur-sm">

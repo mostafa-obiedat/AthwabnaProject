@@ -21,6 +21,7 @@
     "chart.js": "^4.4.8",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.9.2",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.487.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -33,6 +34,7 @@
     "react-toastify": "^11.0.5",
     "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
+    "sweetalert2": "^11.21.2",
     "swiper": "^11.2.6"
   },
   "devDependencies": {
