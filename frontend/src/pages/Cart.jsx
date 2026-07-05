@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import React, { useState, useEffect } from "react";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -36,7 +37,7 @@ const Cart = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
 
-  const API_BASE_URL = 'http://localhost:5000/api';
+  const API_BASE_URL = `${API_URL}/api`;
   const themeColor = "bg-[#2B2B2B] hover:bg-[#222222]";
   const themeTextColor = "text-gray-700";
   const secondaryColor = "bg-[#AA1313] hover:bg-[#8a0f0f]";
@@ -50,7 +51,7 @@ const Cart = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/users/check", {
+        const response = await axios.get(`${API_URL}/api/users/check`, {
           withCredentials: true
         });
         if (response.data.isAuthenticated) {
@@ -68,7 +69,7 @@ const Cart = () => {
   useEffect(() => {
     const fetchSuggestedProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/products/related/men");
+        const response = await axios.get(`${API_URL}/api/products/related/men`);
         setSuggestedProducts(response.data);
       } catch (err) {
         console.error("فشل جلب المنتجات المقترحة:", err);
@@ -178,7 +179,7 @@ const Cart = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/favorites/add",
+        `${API_URL}/api/favorites/add`,
         { productId },
         { withCredentials: true }
       );
@@ -244,7 +245,7 @@ const Cart = () => {
               <div className="flex flex-col sm:flex-row items-start gap-4">
                 {/* صورة المنتج */}
                 <img
-                  src={`http://localhost:5000${product.image}`}
+                  src={`${API_URL}${product.image}`}
                   alt={product.title}
                   className="w-full sm:w-24 h-32 object-cover rounded transition-transform duration-300 hover:scale-105"
                 />

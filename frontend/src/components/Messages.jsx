@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 // import React, { useEffect, useState } from "react";
 // import axios from 'axios';
 // import Swal from 'sweetalert2';
@@ -12,7 +13,7 @@
 //     const [activeTab, setActiveTab] = useState("inbox");
 
 //     useEffect(() => {
-//         axios.get("http://localhost:5000/api/admin/messages", { withCredentials: true })
+//         axios.get(`${API_URL}/api/admin/messages`, { withCredentials: true })
 //             .then((res) => {
 //                 setMessages(res.data);
 //             });
@@ -23,7 +24,7 @@
       
 //         try {
 //           await axios.post(
-//             "http://localhost:5000/api/admin/reply",
+//             `${API_URL}/api/admin/reply`,
 //             {
 //               to: selectedMessage.email,
 //               subject,
@@ -245,7 +246,7 @@ function Messages() {
     const [activeTab, setActiveTab] = useState("inbox");
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/admin/messages", { withCredentials: true })
+        axios.get(`${API_URL}/api/admin/messages`, { withCredentials: true })
             .then((res) => {
                 setMessages(res.data);
             });
@@ -256,7 +257,7 @@ function Messages() {
       
         try {
           await axios.post(
-            "http://localhost:5000/api/admin/reply",
+            `${API_URL}/api/admin/reply`,
             {
               to: selectedMessage.email,
               subject,

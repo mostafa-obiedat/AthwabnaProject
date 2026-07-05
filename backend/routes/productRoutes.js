@@ -1,25 +1,24 @@
 const express = require("express");
 const product = require("../controllers/productController");
-const accessories = require("../controllers/accessoriesController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const router = express.Router();
 
-// Route لجلب المنتجات الخاصة بالرجال
+// قوائم المنتجات حسب الفئة
 router.get("/men", product.getMenProducts);
 router.get("/women", product.getWomenProducts);
 router.get("/kids", product.getKidsProducts);
-router.get("/menaccessories", accessories.MenAccessories);
-router.get("/womenaccessories", accessories.WomenAccessories);
+router.get("/menaccessories", product.getMenAccessories);
+router.get("/womenaccessories", product.getWomenAccessories);
 router.get("/offers", product.offers);
-router.get('/bestsellers', product.getBestSellers);
-router.get("/:id", product.getProductById);
-// Route لجلب المنتجات ذات الصلة (من نفس الفئة)
+router.get("/bestsellers", product.getBestSellers);
+
+// المنتجات ذات الصلة (من نفس الفئة)
 router.get("/related/:category", product.getRelatedProducts);
-// router.post("/products/:productId/rate", authMiddleware, product.rateProduct);
+
+// التقييم يتطلب تسجيل الدخول
 router.post("/rate/:id", authMiddleware, product.rateProduct);
 
-
-
-
+// تفاصيل منتج معين — يبقى آخر route حتى لا يلتقط المسارات الثابتة الأخرى
+router.get("/:id", product.getProductById);
 
 module.exports = router;

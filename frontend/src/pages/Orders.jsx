@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -50,7 +51,7 @@ const OrdersPage = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/orders/my-orders', {
+        const response = await axios.get(`${API_URL}/api/orders/my-orders`, {
           withCredentials: true,
           headers: {
             'Content-Type': 'application/json'

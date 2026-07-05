@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 // import React, { useEffect, useState } from 'react';
 // import axios from 'axios';
 // import Swal from 'sweetalert2';
@@ -18,7 +19,7 @@
 
 //   const fetchCustomers = async () => {
 //     try {
-//       const response = await axios.get(`http://localhost:5000/api/admin/customers`, {
+//       const response = await axios.get(`${API_URL}/api/admin/customers`, {
 //         params: { search, page },
 //         withCredentials: true,
 //       });
@@ -47,7 +48,7 @@
 
 //     if (confirmDelete.isConfirmed) {
 //       try {
-//         await axios.delete(`http://localhost:5000/api/admin/users/${id}`, {
+//         await axios.delete(`${API_URL}/api/admin/users/${id}`, {
 //           withCredentials: true,
 //         });
 //         fetchCustomers();
@@ -95,7 +96,7 @@
 
 //   const handleUpdate = async () => {
 //     try {
-//       await axios.put(`http://localhost:5000/api/admin/users/${editingUser._id}`, formData, {
+//       await axios.put(`${API_URL}/api/admin/users/${editingUser._id}`, formData, {
 //         withCredentials: true,
 //       });
 //       Swal.fire({
@@ -154,7 +155,7 @@
 //                 <div className="border-b border-gray-100 p-4">
 //                   <div className="flex items-center gap-4">
 //                     <img
-//                       src={`http://localhost:5000${customer.profileImage}`}
+//                       src={`${API_URL}${customer.profileImage}`}
 //                       alt={customer.username}
 //                       className="w-16 h-16 rounded-full object-cover border-2 border-[#AA1313]"
 //                     />
@@ -309,7 +310,7 @@ function Customers() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/admin/customers`, {
+      const response = await axios.get(`${API_URL}/api/admin/customers`, {
         params: { search, page },
         withCredentials: true,
       });
@@ -338,7 +339,7 @@ function Customers() {
 
     if (confirmDelete.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:5000/api/admin/users/${id}`, {
+        await axios.delete(`${API_URL}/api/admin/users/${id}`, {
           withCredentials: true,
         });
         fetchCustomers();
@@ -386,7 +387,7 @@ function Customers() {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/admin/users/${editingUser._id}`, formData, {
+      await axios.put(`${API_URL}/api/admin/users/${editingUser._id}`, formData, {
         withCredentials: true,
       });
       Swal.fire({
@@ -445,7 +446,7 @@ function Customers() {
                 <div className="border-b border-gray-100 p-3 sm:p-4">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                     <img
-                      src={`http://localhost:5000${customer.profileImage}`}
+                      src={`${API_URL}${customer.profileImage}`}
                       alt={customer.username}
                       className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-[#AA1313]"
                     />

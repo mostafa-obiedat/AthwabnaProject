@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import React, { useState } from "react";
 import axios from "axios";
 import { Send, Phone, Mail, MapPin, CheckCircle, AlertCircle, Star } from "lucide-react";
@@ -41,7 +42,7 @@ const Contact = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/api/contacts/create", formData);
+      const response = await axios.post(`${API_URL}/api/contacts/create`, formData);
       setStatus({ type: "success", message: "تم إرسال رسالتك بنجاح!" });
       setFormData({ 
         name: "", 

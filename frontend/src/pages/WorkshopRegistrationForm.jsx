@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 // import React, { useState } from 'react';
 // import { useParams, useLocation } from 'react-router-dom';
 // import axios from 'axios';
@@ -26,7 +27,7 @@
 
 //   const handleRegistration = async () => {
 //     try {
-//       await axios.post(`http://localhost:5000/api/workshops/${id}/register`, formData);
+//       await axios.post(`${API_URL}/api/workshops/${id}/register`, formData);
 //       setSuccess(true);
 //       // لا تفرغ النموذج مباشرة حتى تظهر المعلومات برسالة النجاح
 //       // setFormData({ name: '', email: '', phone: '' });
@@ -106,7 +107,7 @@
 //           <PayPalScriptProvider options={{ "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID }}>
 //             <PayPalButtons
 //               createOrder={() => {
-//                 return fetch("http://localhost:5000/api/payments/create-paypal-order", {
+//                 return fetch(`${API_URL}/api/payments/create-paypal-order`, {
 //                   method: "POST",
 //                   headers: {
 //                     "Content-Type": "application/json",
@@ -188,7 +189,7 @@ const WorkshopRegistrationForm = () => {
   const handleRegistration = async () => {
     setIsLoading(true);
     try {
-      await axios.post(`http://localhost:5000/api/workshops/${id}/register`, {
+      await axios.post(`${API_URL}/api/workshops/${id}/register`, {
         ...formData,
         workshopId: id,
         workshopTitle: workshop?.title,
@@ -383,7 +384,7 @@ const WorkshopRegistrationForm = () => {
                       <PayPalButtons
                         style={{ layout: "vertical" }}
                         createOrder={() => {
-                          return fetch("http://localhost:5000/api/payments/create-paypal-order", {
+                          return fetch(`${API_URL}/api/payments/create-paypal-order`, {
                             method: "POST",
                             headers: {
                               "Content-Type": "application/json",

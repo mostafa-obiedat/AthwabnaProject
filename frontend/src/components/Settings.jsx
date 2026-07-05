@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";
 
@@ -12,7 +13,7 @@
 //     const [errorMsg, setErrorMsg] = useState("");
 
 //     useEffect(() => {
-//         axios.get("http://localhost:5000/api/admin/settings", { withCredentials: true })
+//         axios.get(`${API_URL}/api/admin/settings`, { withCredentials: true })
 //             .then(res => {
 //                 setName(res.data.name); // الـ name جاي من username في الباك
 //                 setPhone(res.data.phonenumber);
@@ -23,7 +24,7 @@
 //     const handleInfoUpdate = async (e) => {
 //         e.preventDefault();
 //         try {
-//             await axios.put("http://localhost:5000/api/admin/update-info", {
+//             await axios.put(`${API_URL}/api/admin/update-info`, {
 //                 name,
 //                 phone,
 //             }, { withCredentials: true });
@@ -43,7 +44,7 @@
 //         }
 
 //         try {
-//             await axios.put("http://localhost:5000/api/admin/update-password", {
+//             await axios.put(`${API_URL}/api/admin/update-password`, {
 //                 oldPassword,
 //                 newPassword,
 //             }, { withCredentials: true });
@@ -144,7 +145,7 @@
 //     const [errorMsg, setErrorMsg] = useState("");
 
 //     useEffect(() => {
-//         axios.get("http://localhost:5000/api/admin/settings", { withCredentials: true })
+//         axios.get(`${API_URL}/api/admin/settings`, { withCredentials: true })
 //             .then(res => {
 //                 setName(res.data.name);
 //                 setPhone(res.data.phonenumber);
@@ -155,7 +156,7 @@
 //     const handleInfoUpdate = async (e) => {
 //         e.preventDefault();
 //         try {
-//             await axios.put("http://localhost:5000/api/admin/update-info", {
+//             await axios.put(`${API_URL}/api/admin/update-info`, {
 //                 name,
 //                 phone,
 //             }, { withCredentials: true });
@@ -175,7 +176,7 @@
 //         }
 
 //         try {
-//             await axios.put("http://localhost:5000/api/admin/update-password", {
+//             await axios.put(`${API_URL}/api/admin/update-password`, {
 //                 oldPassword,
 //                 newPassword,
 //             }, { withCredentials: true });
@@ -321,7 +322,7 @@
 //     const [errorMsg, setErrorMsg] = useState("");
 
 //     useEffect(() => {
-//         axios.get("http://localhost:5000/api/admin/settings", { withCredentials: true })
+//         axios.get(`${API_URL}/api/admin/settings`, { withCredentials: true })
 //             .then(res => {
 //                 setName(res.data.name);
 //                 setPhone(res.data.phonenumber);
@@ -333,7 +334,7 @@
 //         e.preventDefault();
 //         try {
 //             await axios.put(
-//                 "http://localhost:5000/api/admin/update-info",
+//                 `${API_URL}/api/admin/update-info`,
 //                 { name, phone },
 //                 { withCredentials: true }
 //             );
@@ -391,7 +392,7 @@
 
 //         try {
 //              await axios.put(
-//                 "http://localhost:5000/api/admin/update-password",
+//                 `${API_URL}/api/admin/update-password`,
 //                 { oldPassword, newPassword },
 //                 { withCredentials: true }
 //             );
@@ -571,7 +572,7 @@ function Settings() {
     const [errorMsg, setErrorMsg] = useState("");
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/admin/settings", { withCredentials: true })
+        axios.get(`${API_URL}/api/admin/settings`, { withCredentials: true })
             .then(res => {
                 setName(res.data.name);
                 setPhone(res.data.phonenumber);
@@ -583,7 +584,7 @@ function Settings() {
         e.preventDefault();
         try {
             await axios.put(
-                "http://localhost:5000/api/admin/update-info",
+                `${API_URL}/api/admin/update-info`,
                 { name, phone },
                 { withCredentials: true }
             );
@@ -641,7 +642,7 @@ function Settings() {
 
         try {
              await axios.put(
-                "http://localhost:5000/api/admin/update-password",
+                `${API_URL}/api/admin/update-password`,
                 { oldPassword, newPassword },
                 { withCredentials: true }
             );

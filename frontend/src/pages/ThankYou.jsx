@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -24,7 +25,7 @@ function ThankYou() {
     const fetchOrderDetails = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/orders/${orderId}`, { withCredentials: true });
+        const response = await axios.get(`${API_URL}/api/orders/${orderId}`, { withCredentials: true });
         setOrderDetails(response.data.order);
         setIsLoading(false);
       } catch (err) {

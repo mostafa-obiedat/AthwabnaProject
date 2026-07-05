@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -104,7 +105,7 @@ function Register() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/users/register', formData, {
+      const response = await axios.post(`${API_URL}/api/users/register`, formData, {
         headers: {
           'Content-Type': 'application/json',
         },

@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import React, { useState } from 'react';
 import axios from 'axios'; // استيراد axios
 import toast, { Toaster } from 'react-hot-toast';// استيراد toast لعرض الرسائل
@@ -27,7 +28,7 @@ function Login() {
   
     try {
       // 1. تسجيل الدخول
-      const response = await axios.post('http://localhost:5000/api/users/login', formData, {
+      const response = await axios.post(`${API_URL}/api/users/login`, formData, {
         withCredentials: true,
       });
   
@@ -45,7 +46,7 @@ function Login() {
         });
   
         // 2. الحصول على بيانات المستخدم باستخدام /me
-        const userResponse = await axios.get('http://localhost:5000/api/users/me', {
+        const userResponse = await axios.get(`${API_URL}/api/users/me`, {
           withCredentials: true,
         });
   

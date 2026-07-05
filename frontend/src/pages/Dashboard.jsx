@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import React, { useState, useEffect } from 'react';
 import { FiBell, FiHome, FiPackage, FiUsers, FiShoppingCart, FiTool, FiMessageSquare, FiSettings, FiLogOut, FiMenu, FiX } from "react-icons/fi";
 import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
@@ -42,7 +43,7 @@ function Dashboard() {
 
   const handleLogout = async () => {
     try {
-      await axios.get("http://localhost:5000/api/users/adminlogout", { withCredentials: true });
+      await axios.get(`${API_URL}/api/users/adminlogout`, { withCredentials: true });
       navigate("/login"); // يرجع لصفحة تسجيل الدخول
     } catch (err) {
       console.error("Logout error", err);

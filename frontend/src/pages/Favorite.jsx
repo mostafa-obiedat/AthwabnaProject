@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../redux/slices/cartSlice'; 
@@ -16,7 +17,7 @@ const Favorite = () => {
     useEffect(() => {
         const fetchFavorites = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/favorites', {
+                const response = await axios.get(`${API_URL}/api/favorites`, {
                     withCredentials: true,
                 });
                 setFavorites(response.data);
@@ -54,7 +55,7 @@ const Favorite = () => {
 
     const removeFromFavorites = async (productId) => {
         try {
-            await axios.delete(`http://localhost:5000/api/favorites/${productId}`, {
+            await axios.delete(`${API_URL}/api/favorites/${productId}`, {
                 withCredentials: true,
             });
             setFavorites(favorites.filter(fav => fav.product._id !== productId));
@@ -125,7 +126,7 @@ const Favorite = () => {
                                 >
                                     <img
                                         src={product.images?.[0] 
-                                            ? `http://localhost:5000${product.images[0]}`
+                                            ? `${API_URL}${product.images[0]}`
                                             : '/placeholder-product.jpg'}
                                         alt={product.name || 'Product'}
                                         className="w-full h-full object-cover hover:scale-105 transition duration-300"

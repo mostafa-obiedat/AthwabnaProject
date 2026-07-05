@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
 // import Swal from 'sweetalert2';
@@ -28,7 +29,7 @@
 
 //   const fetchWorkshops = async () => {
 //     try {
-//       const res = await axios.get("http://localhost:5000/api/admin/workshops", {
+//       const res = await axios.get(`${API_URL}/api/admin/workshops`, {
 //         params: { search: searchTerm, page: currentPage, limit: 6 },
 //         withCredentials: true,
 //       });
@@ -52,7 +53,7 @@
 //     try {
 //       if (editingId) {
 //         await axios.put(
-//           `http://localhost:5000/api/admin/workshops/${editingId}`,
+//           `${API_URL}/api/admin/workshops/${editingId}`,
 //           data,
 //           {
 //             withCredentials: true,
@@ -66,7 +67,7 @@
 //           confirmButtonColor: '#AA1313',
 //         });
 //       } else {
-//         await axios.post("http://localhost:5000/api/admin/workshops", data, {
+//         await axios.post(`${API_URL}/api/admin/workshops`, data, {
 //           withCredentials: true,
 //           headers: { "Content-Type": "multipart/form-data" },
 //         });
@@ -105,7 +106,7 @@
   
 //     if (result.isConfirmed) {
 //       try {
-//         await axios.delete(`http://localhost:5000/api/admin/workshops/${id}`, {
+//         await axios.delete(`${API_URL}/api/admin/workshops/${id}`, {
 //           withCredentials: true,
 //         });
 //         Swal.fire({
@@ -367,7 +368,7 @@
 //                 {workshop.image && (
 //                   <div className="relative h-52">
 //                     <img
-//                       src={`http://localhost:5000${workshop.image}`}
+//                       src={`${API_URL}${workshop.image}`}
 //                       alt={workshop.title}
 //                       className="w-full h-full object-cover"
 //                     />
@@ -497,7 +498,7 @@ function Workshops() {
 
   const fetchWorkshops = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/workshops", {
+      const res = await axios.get(`${API_URL}/api/admin/workshops`, {
         params: { search: searchTerm, page: currentPage, limit: 6 },
         withCredentials: true,
       });
@@ -521,7 +522,7 @@ function Workshops() {
     try {
       if (editingId) {
         await axios.put(
-          `http://localhost:5000/api/admin/workshops/${editingId}`,
+          `${API_URL}/api/admin/workshops/${editingId}`,
           data,
           {
             withCredentials: true,
@@ -535,7 +536,7 @@ function Workshops() {
           confirmButtonColor: '#AA1313',
         });
       } else {
-        await axios.post("http://localhost:5000/api/admin/workshops", data, {
+        await axios.post(`${API_URL}/api/admin/workshops`, data, {
           withCredentials: true,
           headers: { "Content-Type": "multipart/form-data" },
         });
@@ -574,7 +575,7 @@ function Workshops() {
   
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:5000/api/admin/workshops/${id}`, {
+        await axios.delete(`${API_URL}/api/admin/workshops/${id}`, {
           withCredentials: true,
         });
         Swal.fire({
@@ -840,7 +841,7 @@ function Workshops() {
                 {workshop.image && (
                   <div className="relative h-40 sm:h-52">
                     <img
-                      src={`http://localhost:5000${workshop.image}`}
+                      src={`${API_URL}${workshop.image}`}
                       alt={workshop.title}
                       className="w-full h-full object-cover"
                     />

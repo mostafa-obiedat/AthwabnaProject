@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 // import React, { useEffect, useState } from 'react';
 // import axios from 'axios';
 
@@ -8,7 +9,7 @@
 
 //   const fetchOrders = async (currentPage) => {
 //     try {
-//       const response = await axios.get(`http://localhost:5000/api/admin/orders?page=${currentPage}&limit=5`, {
+//       const response = await axios.get(`${API_URL}/api/admin/orders?page=${currentPage}&limit=5`, {
 //         withCredentials: true,
 //       });
 //       setOrders(response.data.data);
@@ -221,7 +222,7 @@ function Orders() {
 
   const fetchOrders = async (currentPage) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/admin/orders?page=${currentPage}&limit=5`, {
+      const response = await axios.get(`${API_URL}/api/admin/orders?page=${currentPage}&limit=5`, {
         withCredentials: true,
       });
       setOrders(response.data.data);

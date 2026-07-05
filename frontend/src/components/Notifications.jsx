@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -6,7 +7,7 @@ function Notifications() {
 
   const fetchNotifications = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/notifications", {
+      const res = await axios.get(`${API_URL}/api/admin/notifications`, {
         withCredentials: true,
       });
       setNotifications(res.data.data);
@@ -22,7 +23,7 @@ function Notifications() {
   // ✅ دالة لتحديد الإشعار كمقروء
   const markAsRead = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/admin/notifications/${id}/mark-read`, {}, {
+      await axios.put(`${API_URL}/api/admin/notifications/${id}/mark-read`, {}, {
         withCredentials: true,
       });
       // تحديث الإشعارات

@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 // import React, { useState, useEffect } from 'react';
 
 // function ProductForm({ onSubmit, initialData = {}, onCancel }) {
@@ -289,7 +290,7 @@
 //                   {initialData.images.map((url, index) => (
 //                     <div key={index} className="relative bg-gray-100 rounded-lg overflow-hidden aspect-square">
 //                       <img 
-//                         src={`http://localhost:5000${url}`} 
+//                         src={`${API_URL}${url}`} 
 //                         alt={`صورة ${index + 1}`} 
 //                         className="w-full h-full object-cover"
 //                       />
@@ -617,7 +618,7 @@ function ProductForm({ onSubmit, initialData = {}, onCancel }) {
                   {initialData.images.map((url, index) => (
                     <div key={index} className="relative bg-gray-100 rounded-lg overflow-hidden aspect-square">
                       <img 
-                        src={`http://localhost:5000${url}`} 
+                        src={`${API_URL}${url}`} 
                         alt={`صورة ${index + 1}`} 
                         className="w-full h-full object-cover"
                       />

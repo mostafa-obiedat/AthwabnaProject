@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 // import React, { useEffect, useState } from 'react';
 // import axios from 'axios';
 // import ProductForm from './ProductForm';
@@ -8,7 +9,7 @@
 //   const [showForm, setShowForm] = useState(false);
 
 //   const fetchProducts = async () => {
-//     const res = await axios.get('http://localhost:5000/api/admin/products', { withCredentials: true });
+//     const res = await axios.get(`${API_URL}/api/admin/products`, { withCredentials: true });
 //     setProducts(res.data.data);
 //   };
 
@@ -17,14 +18,14 @@
 //   }, []);
 
 //   const handleDelete = async (id) => {
-//     await axios.delete(`http://localhost:5000/api/admin/products/${id}`, { withCredentials: true });
+//     await axios.delete(`${API_URL}/api/admin/products/${id}`, { withCredentials: true });
 //     fetchProducts();
 //   };
 //   const handleSubmit = async (formData) => {
 //     try {
 //       if (editing) {
 //         await axios.put(
-//           `http://localhost:5000/api/admin/products/${editing._id}`,
+//           `${API_URL}/api/admin/products/${editing._id}`,
 //           formData,
 //           {
 //             withCredentials: true,
@@ -33,7 +34,7 @@
 //         );
 //       } else {
 //         await axios.post(
-//           `http://localhost:5000/api/admin/products`,
+//           `${API_URL}/api/admin/products`,
 //           formData,
 //           {
 //             withCredentials: true,
@@ -68,7 +69,7 @@
 //           <li key={product._id} className="bg-white p-4 rounded shadow">
 //               {product.images && (
 //               <img
-//                 src={`http://localhost:5000${product.images[0]}`}
+//                 src={`${API_URL}${product.images[0]}`}
 //                 alt={product.name}
 //                 className="w-full max-h-64 object-cover object-center rounded mb-2"
 //               />
@@ -103,7 +104,7 @@
 //   const [showForm, setShowForm] = useState(false);
 
 //   const fetchProducts = async () => {
-//     const res = await axios.get('http://localhost:5000/api/admin/products', { withCredentials: true });
+//     const res = await axios.get(`${API_URL}/api/admin/products`, { withCredentials: true });
 //     setProducts(res.data.data);
 //   };
 
@@ -112,7 +113,7 @@
 //   }, []);
 
 //   const handleDelete = async (id) => {
-//     await axios.delete(`http://localhost:5000/api/admin/products/${id}`, { withCredentials: true });
+//     await axios.delete(`${API_URL}/api/admin/products/${id}`, { withCredentials: true });
 //     fetchProducts();
 //   };
 
@@ -120,7 +121,7 @@
 //     try {
 //       if (editing) {
 //         await axios.put(
-//           `http://localhost:5000/api/admin/products/${editing._id}`,
+//           `${API_URL}/api/admin/products/${editing._id}`,
 //           formData,
 //           {
 //             withCredentials: true,
@@ -129,7 +130,7 @@
 //         );
 //       } else {
 //         await axios.post(
-//           `http://localhost:5000/api/admin/products`,
+//           `${API_URL}/api/admin/products`,
 //           formData,
 //           {
 //             withCredentials: true,
@@ -179,7 +180,7 @@
 //             {product.images && product.images[0] && (
 //               <div className="h-48 w-full object-cover w-4 aspect-h-3 mb-4">
 //                 <img
-//                   src={`http://localhost:5000${product.images[0]}`}
+//                   src={`${API_URL}${product.images[0]}`}
 //                   alt={product.name}
 //                   className="object-cover object-center w-full h-full rounded-lg"
 //                 />
@@ -244,7 +245,7 @@
 
 //   const fetchProducts = async () => {
 //     try {
-//       const res = await axios.get('http://localhost:5000/api/admin/products', {
+//       const res = await axios.get(`${API_URL}/api/admin/products`, {
 //         params: { search, page, limit: 6 },
 //         withCredentials: true,
 //       });
@@ -256,7 +257,7 @@
 //   };
 
 //   const handleDelete = async (id) => {
-//     await axios.delete(`http://localhost:5000/api/admin/products/${id}`, {
+//     await axios.delete(`${API_URL}/api/admin/products/${id}`, {
 //       withCredentials: true,
 //     });
 //     fetchProducts();
@@ -266,7 +267,7 @@
 //     try {
 //       if (editing) {
 //         await axios.put(
-//           `http://localhost:5000/api/admin/products/${editing._id}`,
+//           `${API_URL}/api/admin/products/${editing._id}`,
 //           formData,
 //           {
 //             withCredentials: true,
@@ -275,7 +276,7 @@
 //         );
 //       } else {
 //         await axios.post(
-//           `http://localhost:5000/api/admin/products`,
+//           `${API_URL}/api/admin/products`,
 //           formData,
 //           {
 //             withCredentials: true,
@@ -334,7 +335,7 @@
 //           <div key={product._id} className="bg-white rounded-lg shadow-md p-4">
 //             {product.images?.length > 0 && (
 //               <img
-//                 src={`http://localhost:5000${product.images[0]}`}
+//                 src={`${API_URL}${product.images[0]}`}
 //                 alt={product.name}
 //                 className="w-full h-48 object-cover rounded mb-3"
 //               />
@@ -418,7 +419,7 @@
 //   const fetchProducts = async () => {
 //     setIsLoading(true);
 //     try {
-//       const res = await axios.get('http://localhost:5000/api/admin/products', {
+//       const res = await axios.get(`${API_URL}/api/admin/products`, {
 //         params: { search, page, limit: 6 },
 //         withCredentials: true,
 //       });
@@ -445,7 +446,7 @@
   
 //     if (result.isConfirmed) {
 //       try {
-//         await axios.delete(`http://localhost:5000/api/admin/products/${id}`, {
+//         await axios.delete(`${API_URL}/api/admin/products/${id}`, {
 //           withCredentials: true,
 //         });
 //         fetchProducts();
@@ -469,7 +470,7 @@
 //     try {
 //       if (editing) {
 //         await axios.put(
-//           `http://localhost:5000/api/admin/products/${editing._id}`,
+//           `${API_URL}/api/admin/products/${editing._id}`,
 //           formData,
 //           {
 //             withCredentials: true,
@@ -484,7 +485,7 @@
 //       });
 //       } else {
 //         await axios.post(
-//           `http://localhost:5000/api/admin/products`,
+//           `${API_URL}/api/admin/products`,
 //           formData,
 //           {
 //             withCredentials: true,
@@ -590,7 +591,7 @@
 //               {product.images?.length > 0 ? (
 //                 <div className="relative h-52 overflow-hidden">
 //                   <img
-//                     src={`http://localhost:5000${product.images[0]}`}
+//                     src={`${API_URL}${product.images[0]}`}
 //                     alt={product.name}
 //                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
 //                   />
@@ -722,7 +723,7 @@ function Products() {
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/admin/products', {
+      const res = await axios.get(`${API_URL}/api/admin/products`, {
         params: { search, page, limit: 6 },
         withCredentials: true,
       });
@@ -749,7 +750,7 @@ function Products() {
   
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:5000/api/admin/products/${id}`, {
+        await axios.delete(`${API_URL}/api/admin/products/${id}`, {
           withCredentials: true,
         });
         fetchProducts();
@@ -773,7 +774,7 @@ function Products() {
     try {
       if (editing) {
         await axios.put(
-          `http://localhost:5000/api/admin/products/${editing._id}`,
+          `${API_URL}/api/admin/products/${editing._id}`,
           formData,
           {
             withCredentials: true,
@@ -788,7 +789,7 @@ function Products() {
       });
       } else {
         await axios.post(
-          `http://localhost:5000/api/admin/products`,
+          `${API_URL}/api/admin/products`,
           formData,
           {
             withCredentials: true,
@@ -893,7 +894,7 @@ function Products() {
                 {product.images?.length > 0 ? (
                   <div className="relative h-40 sm:h-48 md:h-52 overflow-hidden">
                     <img
-                      src={`http://localhost:5000${product.images[0]}`}
+                      src={`${API_URL}${product.images[0]}`}
                       alt={product.name}
                       className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                     />

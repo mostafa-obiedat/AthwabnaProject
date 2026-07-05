@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 // import React from 'react';
 // import logo from '../assets/logo (3).png';
 // import { Link } from 'react-router-dom';
@@ -83,7 +84,7 @@
 //   useEffect(() => {
 //     const checkLoginStatus = async () => {
 //       try {
-//         const res = await axios.get('http://localhost:5000/api/users/me', {
+//         const res = await axios.get(`${API_URL}/api/users/me`, {
 //           withCredentials: true
 //         });
 //         setIsLoggedIn(true);
@@ -97,7 +98,7 @@
 //   // تسجيل الخروج
 //   const handleLogout = async () => {
 //     try {
-//       await axios.post('http://localhost:5000/api/users/logout', {}, {
+//       await axios.post(`${API_URL}/api/users/logout`, {}, {
 //         withCredentials: true
 //       });
 //       setIsLoggedIn(false);
@@ -257,7 +258,7 @@ const Navbar = () => {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        await axios.get('http://localhost:5000/api/users/me', {
+        await axios.get(`${API_URL}/api/users/me`, {
           withCredentials: true
         });
         setIsLoggedIn(true);
@@ -271,7 +272,7 @@ const Navbar = () => {
   // تسجيل الخروج
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:5000/api/users/logout', {}, {
+      await axios.post(`${API_URL}/api/users/logout`, {}, {
         withCredentials: true
       });
       setIsLoggedIn(false);

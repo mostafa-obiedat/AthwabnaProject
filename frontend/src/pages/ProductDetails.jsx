@@ -1,3 +1,5 @@
+import { API_URL } from "../config";
+import { getColorHex } from "../utils/colors";
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../redux/slices/cartSlice'; 
@@ -39,7 +41,7 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // Constants
-  const API_BASE_URL = 'http://localhost:5000/api';
+  const API_BASE_URL = `${API_URL}/api`;
   const DELIVERY_DATE = new Date();
   DELIVERY_DATE.setDate(DELIVERY_DATE.getDate() + 5);
 
@@ -122,7 +124,7 @@ const ProductDetails = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/favorites/add",
+        `${API_URL}/api/favorites/add`,
         { productId },
         { withCredentials: true }
       );
@@ -727,24 +729,6 @@ useEffect(() => {
       </div>
     </div>
   );
-};
-
-// Helper function to get color hex code
-const getColorHex = (color) => {
-  const colors = {
-    'أسود': '#000000',
-    'أبيض': '#FFFFFF',
-    'أحمر': '#FF0000',
-    'أزرق': '#0000FF',
-    'أخضر': '#008000',
-    'أصفر': '#FFFF00',
-    'رمادي': '#808080',
-    'بني': '#A52A2A',
-    'زهري': '#FFC0CB',
-    'برتقالي': '#FFA500',
-    'بنفسجي': '#800080'
-  };
-  return colors[color] || color;
 };
 
 export default ProductDetails;

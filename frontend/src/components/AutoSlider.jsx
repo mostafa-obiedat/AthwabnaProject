@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 // import React from "react";
 // import Slider from "react-slick";
 // import { Link } from "react-router-dom";
@@ -6,17 +7,17 @@
 // const slides = [
 //   {
 //     title: "آخر العروض",
-//     image: "http://localhost:5000/uploads/ourOffers.png",
+//     image: `${API_URL}/uploads/ourOffers.png`,
 //     link: "/offers",
 //   },
 //   {
 //     title: "ورشاتنا",
-//     image: "http://localhost:5000/uploads/warshatna.png",
+//     image: `${API_URL}/uploads/warshatna.png`,
 //     link: "/workshops",
 //   },
 //   {
 //     title: "من نحن",
-//     image: "http://localhost:5000/uploads/about_us_with_logo.png",
+//     image: `${API_URL}/uploads/about_us_with_logo.png`,
 //     link: "/about",
 //   },
 // ];
@@ -89,7 +90,7 @@ const slides = [
   {
     title: "ورشاتنا",
     subtitle: "اكتشف خبرات فريدة وتعلم مهارات جديدة في ورشاتنا المميزة!",
-    image: "http://localhost:5000/uploads/warshatna.png",
+    image: `${API_URL}/uploads/warshatna.png`,
     link: "/workshop",
     buttonText: "سجل الآن",
     color: "bg-red-800" // تم تغيير اللون حسب طلبك
@@ -97,7 +98,7 @@ const slides = [
   {
     title: "آخر العروض",
     subtitle: "اكتشف أفضل العروض والتخفيضات لدينا الآن!",
-    image: "http://localhost:5000/uploads/ourOffers.png",
+    image: `${API_URL}/uploads/ourOffers.png`,
     link: "/offers",
     buttonText: "عرض العروض",
     color: "bg-red-800" // تم تغيير اللون حسب طلبك
@@ -105,7 +106,7 @@ const slides = [
   {
     title: "من نحن",
     subtitle: "تعرف على رسالتنا وقيمنا وهدفنا في خدمة المجتمع!",
-    image: "http://localhost:5000/uploads/about_us_with_logo.png",
+    image: `${API_URL}/uploads/about_us_with_logo.png`,
     link: "/about",
     buttonText: "تعرف علينا",
     color: "bg-red-800" // تم تغيير اللون حسب طلبك

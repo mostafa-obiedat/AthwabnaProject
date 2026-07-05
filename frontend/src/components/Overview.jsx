@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import Chart from 'chart.js/auto';
@@ -11,7 +12,7 @@ function Overview() {
   useEffect(() => {
     const fetchOverviewData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/admin/overview', {
+        const response = await axios.get(`${API_URL}/api/admin/overview`, {
           withCredentials: true,
         });
         setOverviewData(response.data.data);

@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
@@ -14,7 +15,7 @@ const WorkshopDetails = () => {
   useEffect(() => {
     const fetchWorkshop = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/workshops/${id}`);
+        const response = await axios.get(`${API_URL}/api/workshops/${id}`);
         setWorkshop(response.data.data);
         setAverageRating(Number(response.data.data.averageRating) || 0);
       } catch (err) {
@@ -30,7 +31,7 @@ const WorkshopDetails = () => {
   const handleRating = async (value) => {
     setRating(value);
     try {
-      const res = await axios.post(`http://localhost:5000/api/workshops/${id}/rate`, { rating: value });
+      const res = await axios.post(`${API_URL}/api/workshops/${id}/rate`, { rating: value });
       setIsModalOpen(true);
       setTimeout(() => setIsModalOpen(false), 3000);
       setAverageRating(Number(res.data.averageRating) || 0);
@@ -71,7 +72,7 @@ const WorkshopDetails = () => {
       <header 
         className="relative flex items-center justify-center py-32 bg-cover bg-center overflow-hidden"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(http://localhost:5000${workshop?.image})`
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${API_URL}${workshop?.image})`
         }}
       >
         <div className="container mx-auto px-4 text-center relative z-10">
@@ -153,7 +154,7 @@ const WorkshopDetails = () => {
             <div className="bg-white rounded-xl shadow-lg p-6 sticky top-6 border border-gray-200">
               <div className="mb-6">
                 <img
-                  src={`http://localhost:5000${workshop?.image}`}
+                  src={`${API_URL}${workshop?.image}`}
                   className="w-full h-48 object-cover rounded-lg"
                   alt={workshop?.title}
                 />

@@ -1,24 +1,15 @@
 const Product = require("../models/Product");
+const asyncHandler = require("../utils/asyncHandler");
 
-// Get all products
-exports.getAllProducts = async (req, res) => {
+// إنشاء منتج جديد (مع رفع حتى 5 صور)
+exports.createProduct = async (req, res) => {
   try {
-    const products = await Product.find();
-    res.json({ data: products });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch products" });
-  }
-};
-
-// Create a new product
-exports.createProduct = async (req, res) => { 
-  try {
-    const imagePaths = req.files.map(file => `/uploads/${file.filename}`);
+    const imagePaths = req.files.map((file) => `/uploads/${file.filename}`);
     const newProduct = new Product({
       ...req.body,
       images: imagePaths,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     await newProduct.save();
@@ -28,25 +19,20 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-// Update an existing product
+// تعديل منتج (الصور اختيارية)
 exports.updateProduct = async (req, res) => {
   try {
-    const imagePaths = req.files?.length > 0
-      ? req.files.map(file => `/uploads/${file.filename}`)
-      : undefined;
+    const imagePaths =
+      req.files?.length > 0
+        ? req.files.map((file) => `/uploads/${file.filename}`)
+        : undefined;
 
-    const updatedFields = {
-      ...req.body,
-      updatedAt: new Date(),
-    };
-
+    const updatedFields = { ...req.body, updatedAt: new Date() };
     if (imagePaths) updatedFields.images = imagePaths;
-    
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.params.id,
-      updatedFields,
-      { new: true }
-    );
+
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, updatedFields, {
+      new: true,
+    });
 
     if (!updatedProduct) return res.status(404).json({ error: "Product not found" });
 
@@ -56,14 +42,9 @@ exports.updateProduct = async (req, res) => {
   }
 };
 
-// Delete a product
-exports.deleteProduct = async (req, res) => {
-  try {
-    const deleted = await Product.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).json({ error: "Product not found" });
-
-    res.json({ message: "Product deleted" });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to delete product" });
-  }
-};
+// حذف منتج
+exports.deleteProduct = asyncHandler(async (req, res) => {
+  const deleted = await Product.findByIdAndDelete(req.params.id);
+  if (!deleted) return res.status(404).json({ error: "Product not found" });
+  res.json({ message: "Product deleted" });
+}, "Failed to delete product");

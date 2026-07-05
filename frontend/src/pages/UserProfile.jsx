@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
@@ -21,7 +22,7 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/users/profile', { withCredentials: true });
+        const res = await axios.get(`${API_URL}/api/users/profile`, { withCredentials: true });
         setUser(res.data.user);
         setPayments(res.data.payments);
         setCoupons(res.data.coupons);
@@ -55,7 +56,7 @@ const UserProfile = () => {
       }
 
       const res = await axios.put(
-        'http://localhost:5000/api/users/profile/update',
+        `${API_URL}/api/users/profile/update`,
         formData,
         {
           withCredentials: true,
@@ -122,7 +123,7 @@ const UserProfile = () => {
           <div className="flex flex-col md:flex-row items-center mb-6 md:mb-0">
             <div className="relative mb-4 md:mb-0 md:mr-8">
               <img
-                src={editImage ? URL.createObjectURL(editImage) : `http://localhost:5000${user.profileImage}`}
+                src={editImage ? URL.createObjectURL(editImage) : `${API_URL}${user.profileImage}`}
                 alt="Profile"
                 className="w-24 h-24 md:w-28 md:h-28 rounded-full border-4 border-white shadow-lg object-cover"
               />

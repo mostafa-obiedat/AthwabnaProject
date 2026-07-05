@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 // // src/App.jsx
 // import React from 'react';
 
@@ -188,7 +189,7 @@
 //       setIsLoading(true);
 
 //       const response = await axios.post(
-//         'http://localhost:5000/api/checkout/save-address',
+//         `${API_URL}/api/checkout/save-address`,
 //         {
 //           city: address.city,
 //           address: address.address,
@@ -244,7 +245,7 @@
 
 //       // 3. حفظ العنوان والحصول على ID
 //       const addressResponse = await axios.post(
-//         'http://localhost:5000/api/checkout/save-address',
+//         `${API_URL}/api/checkout/save-address`,
 //         address,
 //         { withCredentials: true }
 //       );
@@ -267,7 +268,7 @@
 
 //       // 5. إنشاء الطلب
 //       const response = await axios.post(
-//         'http://localhost:5000/api/checkout/create-order',
+//         `${API_URL}/api/checkout/create-order`,
 //         orderData,
 //         { withCredentials: true }
 //       );
@@ -533,7 +534,7 @@
 //   const handleSaveAddress = async () => {
 //     try {
 //       setIsLoading(true);
-//       const response = await axios.post('http://localhost:5000/api/checkout/save-address', address, {
+//       const response = await axios.post(`${API_URL}/api/checkout/save-address`, address, {
 //         withCredentials: true,
 //         headers: { 'Content-Type': 'application/json' }
 //       });
@@ -568,7 +569,7 @@
 //         price: item.price
 //       }));
 
-//       const addressResponse = await axios.post('http://localhost:5000/api/checkout/save-address', address, { withCredentials: true });
+//       const addressResponse = await axios.post(`${API_URL}/api/checkout/save-address`, address, { withCredentials: true });
 //       const shippingAddressId = addressResponse.data.address?._id;
 //       if (!shippingAddressId) throw new Error('فشل في تحديد عنوان التوصيل');
 
@@ -581,7 +582,7 @@
 //         totalAmount: orderTotal + shippingFee
 //       };
 
-//       const { data } = await axios.post('http://localhost:5000/api/paymentservices/create-payment', orderData, { withCredentials: true });
+//       const { data } = await axios.post(`${API_URL}/api/paymentservices/create-payment`, orderData, { withCredentials: true });
 //       if (data?.url) {
 //         window.location.href = data.url;
 //       } else {
@@ -744,7 +745,7 @@
 //           price: item.price
 //         }));
 
-//         const addressResponse = await axios.post('http://localhost:5000/api/checkout/save-address', address, { withCredentials: true });
+//         const addressResponse = await axios.post(`${API_URL}/api/checkout/save-address`, address, { withCredentials: true });
 //         const shippingAddressId = addressResponse.data.address?._id;
 
 //         const orderData = {
@@ -756,12 +757,12 @@
 //           totalAmount: orderTotal + shippingFee
 //         };
 
-//         const response = await axios.post('http://localhost:5000/api/paymentservices/create-paypal-order', orderData, { withCredentials: true });
+//         const response = await axios.post(`${API_URL}/api/paymentservices/create-paypal-order`, orderData, { withCredentials: true });
 
 //         return response.data.orderID; // يجب أن يرجع orderID
 //       }}
 //       onApprove={async (data, actions) => {
-//         const response = await axios.post('http://localhost:5000/api/paymentservices/capture-paypal-order', {
+//         const response = await axios.post(`${API_URL}/api/paymentservices/capture-paypal-order`, {
 //           orderID: data.orderID,
 //         }, { withCredentials: true });
 
@@ -855,7 +856,7 @@
 //   const handleApplyCoupon = async () => {
 //     try {
 //       setIsLoading(true);
-//       const response = await axios.post('http://localhost:5000/api/checkout/apply-coupon', { couponCode }, { withCredentials: true });
+//       const response = await axios.post(`${API_URL}/api/checkout/apply-coupon`, { couponCode }, { withCredentials: true });
 //       setAppliedCoupon(response.data.coupon);
 //       setCouponError('');
 //     } catch (error) {
@@ -868,7 +869,7 @@
 //   const handleSaveAddress = async () => {
 //     try {
 //       setIsLoading(true);
-//       const response = await axios.post('http://localhost:5000/api/checkout/save-address',
+//       const response = await axios.post(`${API_URL}/api/checkout/save-address`,
 //         {
 //           city: address.city,
 //           address: address.address,
@@ -1082,7 +1083,7 @@
 //                     };
 
 //                     const response = await axios.post(
-//                       'http://localhost:5000/api/payments/paypal/product',
+//                       `${API_URL}/api/payments/paypal/product`,
 //                       orderData,
 //                       { withCredentials: true }
 //                     );
@@ -1099,7 +1100,7 @@
 //                   try {
 //                     // 1. تأكيد الدفع مع PayPal أولاً
 //                     const paymentResponse = await axios.post(
-//                       'http://localhost:5000/api/payments/capture-paypal-order',
+//                       `${API_URL}/api/payments/capture-paypal-order`,
 //                       {
 //                         orderID: data.orderID,
 //                         couponCode: appliedCoupon?.code || null,
@@ -1114,7 +1115,7 @@
 
 //                     // 2. إنشاء العنوان إذا لم يكن موجوداً
 //                     const addressResponse = await axios.post(
-//                       'http://localhost:5000/api/checkout/save-address',
+//                       `${API_URL}/api/checkout/save-address`,
 //                       {
 //                         city: address.city,
 //                         address: address.address,
@@ -1131,7 +1132,7 @@
 
 //                     // 3. إنشاء الطلب في النظام
 //                     const orderResponse = await axios.post(
-//                       'http://localhost:5000/api/checkout/create-order',
+//                       `${API_URL}/api/checkout/create-order`,
 //                       {
 //                         products: cart.map(item => ({
 //                           product: item.productId,
@@ -1246,7 +1247,7 @@ function Checkout() {
   const handleApplyCoupon = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post('http://localhost:5000/api/checkout/apply-coupon', { couponCode }, { withCredentials: true });
+      const response = await axios.post(`${API_URL}/api/checkout/apply-coupon`, { couponCode }, { withCredentials: true });
       setAppliedCoupon(response.data.coupon);
       setCouponError('');
     } catch (error) {
@@ -1259,7 +1260,7 @@ function Checkout() {
   const handleSaveAddress = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post('http://localhost:5000/api/checkout/save-address',
+      const response = await axios.post(`${API_URL}/api/checkout/save-address`,
         {
           city: address.city,
           address: address.address,
@@ -1538,7 +1539,7 @@ function Checkout() {
                       };
 
                       const response = await axios.post(
-                        'http://localhost:5000/api/payments/paypal/product',
+                        `${API_URL}/api/payments/paypal/product`,
                         orderData,
                         { withCredentials: true }
                       );
@@ -1555,7 +1556,7 @@ function Checkout() {
                     try {
                       // 1. تأكيد الدفع مع PayPal أولاً
                       const paymentResponse = await axios.post(
-                        'http://localhost:5000/api/payments/capture-paypal-order',
+                        `${API_URL}/api/payments/capture-paypal-order`,
                         {
                           orderID: data.orderID,
                           couponCode: appliedCoupon?.code || null,
@@ -1570,7 +1571,7 @@ function Checkout() {
 
                       // 2. إنشاء العنوان إذا لم يكن موجوداً
                       const addressResponse = await axios.post(
-                        'http://localhost:5000/api/checkout/save-address',
+                        `${API_URL}/api/checkout/save-address`,
                         {
                           city: address.city,
                           address: address.address,
@@ -1587,7 +1588,7 @@ function Checkout() {
 
                       // 3. إنشاء الطلب في النظام
                       const orderResponse = await axios.post(
-                        'http://localhost:5000/api/checkout/create-order',
+                        `${API_URL}/api/checkout/create-order`,
                         {
                           products: cart.map(item => ({
                             product: item.productId,

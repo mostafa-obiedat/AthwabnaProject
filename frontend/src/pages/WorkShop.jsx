@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 // import React, { useState, useEffect } from 'react';
 // import axios from 'axios';
 // import { Link } from 'react-router-dom';
@@ -25,7 +26,7 @@
 //           location: filters.location
 //         };
 
-//         const response = await axios.get('http://localhost:5000/api/workshops', { params });
+//         const response = await axios.get(`${API_URL}/api/workshops`, { params });
 //         setWorkshops(response.data);
 //       } catch (err) {
 //         setError(err.message);
@@ -103,7 +104,7 @@
 //                     {workshop.isFree ? 'مجاناً' : `${workshop.price} دينار`}
 //                   </div>
 //                   <img
-//                     src={`http://localhost:5000${workshop.image}`}
+//                     src={`${API_URL}${workshop.image}`}
 //                     className="h-[170px] w-full object-cover"
 //                     alt={workshop.title}
 //                   />
@@ -165,7 +166,7 @@ const WorkShop = () => {
         query: filters.searchQuery
       };
 
-      const response = await axios.get('http://localhost:5000/api/workshops', { params });
+      const response = await axios.get(`${API_URL}/api/workshops`, { params });
       setWorkshops(response.data);
     } catch (err) {
       setError(err.message);
@@ -368,7 +369,7 @@ const WorkShop = () => {
                 <Link to={`/workshops/${workshop._id}`}>
                   <div className="relative overflow-hidden cursor-pointer">
                     <motion.img
-                      src={`http://localhost:5000${workshop.image}`}
+                      src={`${API_URL}${workshop.image}`}
                       alt={workshop.title}
                       className="h-52 w-full object-cover"
                       whileHover={{ scale: 1.03 }}
